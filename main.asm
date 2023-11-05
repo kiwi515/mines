@@ -10,15 +10,20 @@ INCLUDE console.inc
 .model flat,stdcall
 .stack 4096
 
-.data
-sExampleStr BYTE "Example message",0
-
 .code
+
+;=============================================================================;
+; Name: main
+; Details: Program entrypoint
+; 
+; Arguments: None
+; Return: None
+;=============================================================================;
 main proc
     invoke Console_Init
-    invoke Console_Print, ADDR sExampleStr
 
     ; Exit program
     invoke ExitProcess,0
 main endp
+
 end main

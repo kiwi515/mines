@@ -48,6 +48,7 @@ Mouse_Init proc \
     ;   To disable this mode, use ENABLE_EXTENDED_FLAGS without this flag.
     ;
     ; https://learn.microsoft.com/en-us/windows/console/setconsolemode
+    ;
 
     ; Disable "Quick Edit" mode
     invoke SetConsoleMode, \

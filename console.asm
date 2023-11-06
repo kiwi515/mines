@@ -108,7 +108,7 @@ Console_SetColor endp
 Console_Print proc, \
     msg: PTR BYTE
 
-    local len:DWORD
+    local len: DWORD
 
     ; Get string length
     invoke Str_length, msg

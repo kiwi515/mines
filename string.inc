@@ -1,11 +1,15 @@
-; string.inc String utilities
+;=============================================================================;
+; string.inc - String utilities
 ; Author: Trevor Schiff
+;=============================================================================;
 
-;
+;=============================================================================;
 ; Name: String_Length
+;
 ; Details: Measures length of string
 ; 
-; Arguments: String
-; Return: Integer length
+; Arguments: pbMsg: String to measure
 ;
-String_Length proto, msg:PTR BYTE
+; Return: String length
+;=============================================================================;
+String_Length proto pbMsg: PTR BYTE

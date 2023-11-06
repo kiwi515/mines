@@ -8,30 +8,32 @@
 .stack 4096
 
 .code
-
 ;=============================================================================;
 ; Name: String_Length
+;
 ; Details: Measures length of string
 ; 
-; Arguments: String
-; Return: Integer length
+; Arguments: pbMsg: String to measure
+;
+; Return: String length
 ;=============================================================================;
-String_Length proc USES esi, msg:PTR BYTE
+String_Length proc USES esi, pbMsg: PTR BYTE
     ; String length
     local len:DWORD
     mov len, 0
 
     ; Begin loop
-    mov esi, msg
-    jmp _loop_cond
+    mov esi, pbMsg
+    jmp _loop_body
 
-_loop_body:
+_loop_post:
     inc len
     inc esi
-_loop_cond:
+
+_loop_body:
     ; Check for null terminator
     cmp BYTE PTR [esi], 0
-    jne _loop_body
+    jne _loop_post
 
     ; Return value
     mov eax, len

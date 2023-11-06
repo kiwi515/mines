@@ -11,12 +11,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <MASM Include="board.asm" />
     <MASM Include="console.asm" />
     <MASM Include="main.asm" />
+    <MASM Include="memory.asm" />
+    <MASM Include="mouse.asm" />
     <MASM Include="string.asm" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="board.inc" />
     <None Include="console.inc" />
+    <None Include="const.inc" />
+    <None Include="memory.inc" />
+    <None Include="mouse.inc" />
     <None Include="string.inc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

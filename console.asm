@@ -9,46 +9,89 @@ INCLUDE string.inc
 .386
 .model flat,stdcall
 .stack 4096
-ExitProcess proto,dwExitCode:dword
 
 .data
-dStdin DWORD ?
-dStdout DWORD ?
-dStderr DWORD ?
+; stdin handle
+dwStdIn  DWORD ?
+; stdout handle
+dwStdOut DWORD ?
+; stderr handle
+dwStdErr DWORD ?
 
 .code
-
 ;=============================================================================;
 ; Name: Console_Init
+;
 ; Details: Initializes console handles
 ; 
 ; Arguments: None
+;
 ; Return: None
 ;=============================================================================;
 Console_Init proc
     ; stdin
     invoke GetStdHandle, STD_INPUT_HANDLE
-    mov dStdin, eax
+    mov dwStdIn, eax
 
     ; stdout
     invoke GetStdHandle, STD_OUTPUT_HANDLE
-    mov dStdout, eax
+    mov dwStdOut, eax
 
     ; stderr
     invoke GetStdHandle, STD_ERROR_HANDLE
-    mov dStderr, eax
+    mov dwStdErr, eax
 
     ret
 Console_Init endp
 
 ;=============================================================================;
-; Name: Console_Print
-; Details: Prints string to console (stdout)
+; Name: Console_SetPos
+;
+; Details: Set cursor position
 ; 
-; Arguments: Message
+; Arguments: bPosX: Cursor X-position
+;            bPosY: Cursor Y-position
+;
 ; Return: None
 ;=============================================================================;
-Console_Print proc, msg:PTR BYTE
+Console_SetPos proc USES edx, bPosX: BYTE, bPosY: BYTE
+    ; Call down to Irvine
+    mov dh, bPosX
+    mov dl, bPosY
+    call Gotoxy
+    
+    ret
+Console_SetPos endp
+
+;=============================================================================;
+; Name: Console_SetColor
+;
+; Details: Set text color
+; 
+; Arguments: bColorFG: Foreground color
+;            bColorBG: Background color
+;
+; Return: None
+;=============================================================================;
+Console_SetColor proc uses eax, bColorFG: BYTE, bColorBG: BYTE
+    ; Call down to Irvine
+    mov al, bColorFG
+    mov ah, bColorBG
+    call SetTextColor
+
+    ret
+Console_SetColor endp
+
+;=============================================================================;
+; Name: Console_Print
+;
+; Details: Prints string to stdout
+; 
+; Arguments: pbMsg: Message to print
+;
+; Return: None
+;=============================================================================;
+Console_Print proc, msg: PTR BYTE
     local len:DWORD
 
     ; Get string length
@@ -56,11 +99,23 @@ Console_Print proc, msg:PTR BYTE
     mov len, eax
 
     ; Write string to console
-    invoke WriteConsole, dStdout, msg, len, NULL, NULL
+    invoke WriteConsole, dwStdOut, msg, len, NULL, NULL
     
     ret
 Console_Print endp
 
-
+;=============================================================================;
+; Name: Console_PrintChar
+;
+; Details: Prints character to stdout
+; 
+; Arguments: bChar: Character to print
+;
+; Return: None
+;=============================================================================;
+Console_PrintChar proc, bChar: BYTE
+    invoke WriteConsole, dwStdOut, ADDR bChar, SIZEOF bChar, NULL, NULL
+    ret
+Console_PrintChar endp
 
 end

@@ -5,18 +5,57 @@
 
 ;=============================================================================;
 ; Name: Console_Init
+;
 ; Details: Initializes console handles
 ; 
 ; Arguments: None
+;
 ; Return: None
 ;=============================================================================;
 Console_Init proto
 
 ;=============================================================================;
-; Name: Console_Print
-; Details: Prints string to console (stdout)
+; Name: Console_SetPos
+;
+; Details: Set cursor position
 ; 
-; Arguments: Message
+; Arguments: bPosX: Cursor X-position
+;            bPosY: Cursor Y-position
+;
 ; Return: None
 ;=============================================================================;
-Console_Print proto, msg:PTR BYTE
+Console_SetPos proto, bPosX: BYTE, bPosY: BYTE
+
+;=============================================================================;
+; Name: Console_SetColor
+;
+; Details: Set text color
+; 
+; Arguments: bColorFG: Foreground color
+;            bColorBG: Background color
+;
+; Return: None
+;=============================================================================;
+Console_SetColor proto, bColorFG: BYTE, bColorBG: BYTE
+
+;=============================================================================;
+; Name: Console_Print
+;
+; Details: Prints string to stdout
+; 
+; Arguments: pbMsg: Message to print
+;
+; Return: None
+;=============================================================================;
+Console_Print proto, pbMsg: PTR BYTE
+
+;=============================================================================;
+; Name: Console_PrintChar
+;
+; Details: Prints character to stdout
+; 
+; Arguments: bChar: Character to print
+;
+; Return: None
+;=============================================================================;
+Console_PrintChar proto, bChar: BYTE

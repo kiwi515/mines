@@ -35,7 +35,8 @@ Mouse_Init proc \
     USES eax
 
     ;
-    ; Have to disable Win10 text "Quick Edit" mode or mouse events will not show up.
+    ; For some reason, I have to disable Win10 "Quick Edit" mode
+    ; or mouse events will go uncaught.
     ;
     ; Per Microsoft documentation:
     ; 

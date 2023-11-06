@@ -13,7 +13,7 @@ kTileFlagClear EQU 1 ; Tile has been cleared
 kTileFlagMine  EQU 2 ; Tile contains a mine
 
 ; Game state
-externdef dwBoardState:DWORD
+externdef dwBoardState: DWORD
 
 ;=============================================================================;
 ; Name: Board_Init

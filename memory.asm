@@ -4,6 +4,8 @@
 ;=============================================================================;
 
 INCLUDE Irvine32.inc
+INCLUDE memory.inc
+
 INCLUDE const.inc
 
 .386
@@ -22,7 +24,12 @@ INCLUDE const.inc
 ;
 ; Return: None
 ;=============================================================================;
-Memory_Copy proc USES eax ebx edx, pbDst: PTR BYTE, pbSrc: PTR BYTE, dwSize: DWORD
+Memory_Copy proc      \
+    USES eax ebx edx, \
+    pbDst:  PTR BYTE, \
+    pbSrc:  PTR BYTE, \
+    dwSize: DWORD
+
     ; Load parameters
     mov eax, pbDst
     mov ebx, pbSrc
@@ -59,7 +66,12 @@ Memory_Copy endp
 ;
 ; Return: None
 ;=============================================================================;
-Memory_Set proc USES eax ebx, pbDst: PTR BYTE, bVal: BYTE, dwSize: DWORD
+Memory_Set proc       \
+    USES eax ebx,     \
+    pbDst:  PTR BYTE, \
+    bVal:   BYTE,     \
+    dwSize: DWORD
+
     ; Load parameters
     mov eax, pbDst
     mov bl,  bVal

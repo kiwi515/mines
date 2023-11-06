@@ -5,6 +5,7 @@
 
 INCLUDE Irvine32.inc
 INCLUDE board.inc
+
 INCLUDE const.inc
 INCLUDE console.inc
 INCLUDE memory.inc
@@ -33,9 +34,15 @@ dwBoardState DWORD ?
 ; Return: None
 ;=============================================================================;
 Board_Init proc
-    ; Clear board
-    invoke Memory_Set, ADDR bBoard,     0, SIZEOF bBoard
-    invoke Memory_Set, ADDR bAdjacency, 0, SIZEOF bAdjacency
+    ; Clear tile flags
+    mMemory_Clear    \
+        ADDR bBoard, \ ; pbDst
+        SIZEOF bBoard  ; dwSize
+
+    ; Clear tile adjacency
+    mMemory_Clear        \
+        ADDR bAdjacency, \ ; pbDst
+        SIZEOF bAdjacency  ; dwSize
 
     ; Set play state
     mov dwBoardState, kStatePlay
@@ -54,7 +61,9 @@ Board_Init endp
 ;=============================================================================;
 Board_Draw proc
     ; Put cursor in top-left
-    invoke Console_SetPos, 0, 0
+    invoke Console_SetPos, \
+        0, \ ; bPosX
+        0    ; bPosY
 
     ret
 Board_Draw endp

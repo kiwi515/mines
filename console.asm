@@ -4,7 +4,9 @@
 ;=============================================================================;
 
 INCLUDE Irvine32.inc
-INCLUDE string.inc
+INCLUDE console.inc
+
+INCLUDE debug.inc
 
 .386
 .model flat,stdcall
@@ -29,17 +31,21 @@ dwStdErr DWORD ?
 ; Return: None
 ;=============================================================================;
 Console_Init proc
+
     ; stdin
     invoke GetStdHandle, STD_INPUT_HANDLE
     mov dwStdIn, eax
+    mDebug_AssertTrue(dwStdIn > 0)
 
     ; stdout
     invoke GetStdHandle, STD_OUTPUT_HANDLE
     mov dwStdOut, eax
+    mDebug_AssertTrue(dwStdOut > 0)
 
     ; stderr
     invoke GetStdHandle, STD_ERROR_HANDLE
     mov dwStdErr, eax
+    mDebug_AssertTrue(dwStdErr > 0)
 
     ret
 Console_Init endp
@@ -54,7 +60,11 @@ Console_Init endp
 ;
 ; Return: None
 ;=============================================================================;
-Console_SetPos proc USES edx, bPosX: BYTE, bPosY: BYTE
+Console_SetPos proc \
+    USES edx,       \
+    bPosX: BYTE,    \
+    bPosY: BYTE
+
     ; Call down to Irvine
     mov dh, bPosX
     mov dl, bPosY
@@ -73,7 +83,11 @@ Console_SetPos endp
 ;
 ; Return: None
 ;=============================================================================;
-Console_SetColor proc uses eax, bColorFG: BYTE, bColorBG: BYTE
+Console_SetColor proc \
+    USES eax,         \
+    bColorFG: BYTE,   \
+    bColorBG: BYTE
+
     ; Call down to Irvine
     mov al, bColorFG
     mov ah, bColorBG
@@ -91,11 +105,13 @@ Console_SetColor endp
 ;
 ; Return: None
 ;=============================================================================;
-Console_Print proc, msg: PTR BYTE
+Console_Print proc, \
+    msg: PTR BYTE
+
     local len:DWORD
 
     ; Get string length
-    invoke String_Length, msg
+    invoke Str_length, msg
     mov len, eax
 
     ; Write string to console
@@ -113,8 +129,11 @@ Console_Print endp
 ;
 ; Return: None
 ;=============================================================================;
-Console_PrintChar proc, bChar: BYTE
+Console_PrintChar proc, \
+    bChar: BYTE
+
     invoke WriteConsole, dwStdOut, ADDR bChar, SIZEOF bChar, NULL, NULL
+
     ret
 Console_PrintChar endp
 

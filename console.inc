@@ -3,6 +3,13 @@
 ; Author: Trevor Schiff
 ;=============================================================================;
 
+; stdin handle
+externdef dwStdIn:  DWORD
+; stdout handle
+externdef dwStdOut: DWORD
+; stderr handle
+externdef dwStdErr: DWORD
+
 ;=============================================================================;
 ; Name: Console_Init
 ;
@@ -24,7 +31,9 @@ Console_Init proto
 ;
 ; Return: None
 ;=============================================================================;
-Console_SetPos proto, bPosX: BYTE, bPosY: BYTE
+Console_SetPos proto, \
+    bPosX: BYTE,      \
+    bPosY: BYTE
 
 ;=============================================================================;
 ; Name: Console_SetColor
@@ -36,7 +45,9 @@ Console_SetPos proto, bPosX: BYTE, bPosY: BYTE
 ;
 ; Return: None
 ;=============================================================================;
-Console_SetColor proto, bColorFG: BYTE, bColorBG: BYTE
+Console_SetColor proto, \
+    bColorFG: BYTE,     \
+    bColorBG: BYTE
 
 ;=============================================================================;
 ; Name: Console_Print
@@ -47,7 +58,8 @@ Console_SetColor proto, bColorFG: BYTE, bColorBG: BYTE
 ;
 ; Return: None
 ;=============================================================================;
-Console_Print proto, pbMsg: PTR BYTE
+Console_Print proto, \
+    pbMsg: PTR BYTE
 
 ;=============================================================================;
 ; Name: Console_PrintChar
@@ -58,4 +70,5 @@ Console_Print proto, pbMsg: PTR BYTE
 ;
 ; Return: None
 ;=============================================================================;
-Console_PrintChar proto, bChar: BYTE
+Console_PrintChar proto, \
+    bChar: BYTE

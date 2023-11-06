@@ -13,18 +13,19 @@
   <ItemGroup>
     <MASM Include="board.asm" />
     <MASM Include="console.asm" />
+    <MASM Include="debug.asm" />
     <MASM Include="main.asm" />
     <MASM Include="memory.asm" />
     <MASM Include="mouse.asm" />
-    <MASM Include="string.asm" />
   </ItemGroup>
   <ItemGroup>
     <None Include="board.inc" />
     <None Include="console.inc" />
     <None Include="const.inc" />
+    <None Include="debug.inc" />
     <None Include="memory.inc" />
     <None Include="mouse.inc" />
-    <None Include="string.inc" />
+    <None Include="windows.inc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{4164AA65-1EF9-4E69-899B-D1BED776070B}</ProjectGuid>
@@ -90,6 +91,14 @@
       <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
       <IncludePaths>c:\Irvine</IncludePaths>
       <UseSafeExceptionHandlers>false</UseSafeExceptionHandlers>
+      <GeneratePreprocessedSourceListing>
+      </GeneratePreprocessedSourceListing>
+      <ListAllAvailableInformation>
+      </ListAllAvailableInformation>
+      <AddFirstPassListing>
+      </AddFirstPassListing>
+      <EnableAssemblyGeneratedCodeListing>
+      </EnableAssemblyGeneratedCodeListing>
     </MASM>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

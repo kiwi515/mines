@@ -4,13 +4,19 @@
 ;=============================================================================;
 
 INCLUDE Irvine32.inc
+
 INCLUDE console.inc
 INCLUDE board.inc
 INCLUDE mouse.inc
+INCLUDE debug.inc
 
 .386
 .model flat,stdcall
 .stack 4096
+
+.data
+; Whether to draw this frame
+bDoDraw BYTE TRUE
 
 .code
 ;=============================================================================;
@@ -26,11 +32,8 @@ main proc
     ;================================================;
     ; Initialize
     ;================================================;
-    ; Prepare hardware
-    invoke Mouse_Init
-    ; Prepare console
     invoke Console_Init
-    ; Prepare board
+    invoke Mouse_Init
     invoke Board_Init
 
     ;================================================;
@@ -40,10 +43,18 @@ _loop:
     ; Poll input
     invoke Mouse_Poll
 
-    ; Draw board
+    ; Do we need to draw the board?
+    cmp bDoDraw, FALSE
+    je _after_draw
+
+    ; Clear screen and re-draw board
     invoke Clrscr
     invoke Board_Draw
 
+    ; Only draw when board changes to reduce lag
+    mov bDoDraw, FALSE
+
+_after_draw:
     jmp _loop
 
 _temp:

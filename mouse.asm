@@ -21,9 +21,6 @@ stMouseEvt INPUT_RECORD <>
 ; How many mouse input events were just read
 dwNumEvt DWORD 0
 
-; Whether a click input is ready for the game
-bMouseClicked BYTE FALSE
-
 .code
 ;=============================================================================;
 ; Name: Mouse_Init
@@ -76,21 +73,15 @@ Mouse_Init endp
 ; 
 ; Arguments: None
 ;
-; Return: None
+; Return: Whether a click input was read
 ;=============================================================================;
-Mouse_Poll proc \
-    USES eax
+Mouse_Poll proc
 
-    ;
     ; Clear previous input state
-    ;
-
+    mov dwNumEvt, 0
     mMemory_Clear        \
         ADDR stMouseEvt, \ ; pbDst
         SIZEOF stMouseEvt  ; dwSize
-
-    mov dwNumEvt,      0
-    mov bMouseClicked, FALSE
 
     ; Try reading mouse event
     invoke ReadConsoleInput, \
@@ -104,22 +95,25 @@ Mouse_Poll proc \
 
     ; Did we read anything?
     cmp dwNumEvt, 0
-    je _finish
+    je _no_input
 
     ; Did we specifically read a *mouse* event?
     cmp stMouseEvt.EventType, MOUSE_EVENT
-    jne _finish
+    jne _no_input
 
     ; Did a click (left/right) just happen?
     test stMouseEvt.Event.dwButtonState, \
            FROM_LEFT_1ST_BUTTON_PRESSED  \ ; Left-click
         OR RIGHTMOST_BUTTON_PRESSED        ; Right-click
-    jz _finish
+    jz _no_input
 
     ; We read a click input in this window!
-    mov bMouseClicked, TRUE
+    mov eax, TRUE
+    ret
 
-_finish:
+    ; No click input :(
+_no_input:
+    mov eax, FALSE
     ret
 Mouse_Poll endp
 

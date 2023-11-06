@@ -14,10 +14,6 @@ INCLUDE debug.inc
 .model flat,stdcall
 .stack 4096
 
-.data
-; Whether to draw this frame
-bDoDraw BYTE TRUE
-
 .code
 ;=============================================================================;
 ; Name: main
@@ -44,15 +40,13 @@ _loop:
     invoke Mouse_Poll
 
     ; Do we need to draw the board?
-    cmp bDoDraw, FALSE
+    cmp eax, FALSE
     je _after_draw
+    jmp _temp
 
     ; Clear screen and re-draw board
     invoke Clrscr
     invoke Board_Draw
-
-    ; Only draw when board changes to reduce lag
-    mov bDoDraw, FALSE
 
 _after_draw:
     jmp _loop

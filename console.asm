@@ -32,18 +32,30 @@ dwStdErr DWORD ?
 ;=============================================================================;
 Console_Init proc
 
+    ;
     ; stdin
-    invoke GetStdHandle, STD_INPUT_HANDLE
+    ;
+    invoke GetStdHandle, \
+        STD_INPUT_HANDLE ; nStdHandle
+
     mov dwStdIn, eax
     mDebug_AssertTrue(dwStdIn > 0)
 
+    ;
     ; stdout
-    invoke GetStdHandle, STD_OUTPUT_HANDLE
+    ;
+    invoke GetStdHandle, \
+        STD_OUTPUT_HANDLE ; nStdHandle
+
     mov dwStdOut, eax
     mDebug_AssertTrue(dwStdOut > 0)
 
+    ;
     ; stderr
-    invoke GetStdHandle, STD_ERROR_HANDLE
+    ;
+    invoke GetStdHandle, \
+        STD_ERROR_HANDLE ; nStdHandle
+
     mov dwStdErr, eax
     mDebug_AssertTrue(dwStdErr > 0)
 
@@ -110,12 +122,21 @@ Console_Print proc, \
 
     local len: DWORD
 
+    ;
     ; Get string length
-    invoke Str_length, msg
+    ;
+    invoke Str_length, \
+        msg ; pString
+
     mov len, eax
 
     ; Write string to console
-    invoke WriteConsole, dwStdOut, msg, len, NULL, NULL
+    invoke WriteConsole, \
+        dwStdOut, \ ; hConsoleOutput
+        msg,      \ ; lpBuffer
+        len,      \ ; nNumberOfCharsToWrite
+        NULL,     \ ; lpNumberOfCharsWritten
+        NULL        ; lpReserved
     
     ret
 Console_Print endp
@@ -132,7 +153,13 @@ Console_Print endp
 Console_PrintChar proc, \
     bChar: BYTE
 
-    invoke WriteConsole, dwStdOut, ADDR bChar, SIZEOF bChar, NULL, NULL
+    ; Write single character to console
+    invoke WriteConsole, \
+        dwStdOut,     \ ; hConsoleOutput
+        ADDR bChar,   \ ; lpBuffer
+        SIZEOF bChar, \ ; nNumberOfCharsToWrite
+        NULL,         \ ; lpNumberOfCharsWritten
+        NULL            ; lpReserved
 
     ret
 Console_PrintChar endp

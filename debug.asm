@@ -45,18 +45,18 @@ Debug_CheckErrorWin32 proc \
 
     ; Get message string
     invoke FormatMessage, \
-        dwFlags, \      ; dwFlags
-        NULL, \         ; lpSource
-        dwMessageId, \  ; dwMessageId
-        0, \            ; dwLangaugeId
+        dwFlags,      \ ; dwFlags
+        NULL,         \ ; lpSource
+        dwMessageId,  \ ; dwMessageId
+        0,            \ ; dwLangaugeId
         ADDR pErrMsg, \ ; lpBuffer
-        0, \            ; nSize
+        0,            \ ; nSize
         NULL            ; Arguments
 
     ; Show message through message box
-    invoke MessageBox, \
-        NULL, \               ; hWnd
-        pErrMsg, \            ; lpText
+    invoke MessageBox,     \
+        NULL,              \  ; hWnd
+        pErrMsg,           \  ; lpText
         ADDR sTitleAssert, \  ; lpCaption
         MB_ICONERROR OR MB_OK ; uType
 

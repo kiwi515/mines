@@ -81,17 +81,21 @@ Mouse_Init endp
 Mouse_Poll proc \
     USES eax
 
+    ;
     ; Clear previous input state
-    mMemory_Clear \
+    ;
+
+    mMemory_Clear        \
         ADDR stMouseEvt, \ ; pbDst
         SIZEOF stMouseEvt  ; dwSize
+
     mov dwNumEvt,      0
     mov bMouseClicked, FALSE
 
     ; Try reading mouse event
     invoke ReadConsoleInput, \
-        dwStdIn, \           ; hConsoleInput
-        ADDR stMouseEvt, \   ; lpBuffer
+        dwStdIn,           \ ; hConsoleInput
+        ADDR stMouseEvt,   \ ; lpBuffer
         LENGTH stMouseEvt, \ ; nLength
         ADDR dwNumEvt        ; lpNumberOfEventsRead
 
@@ -108,8 +112,8 @@ Mouse_Poll proc \
 
     ; Did a click (left/right) just happen?
     test stMouseEvt.Event.dwButtonState, \
-        FROM_LEFT_1ST_BUTTON_PRESSED \ ; Left-click
-        OR RIGHTMOST_BUTTON_PRESSED    ; Right-click
+           FROM_LEFT_1ST_BUTTON_PRESSED  \ ; Left-click
+        OR RIGHTMOST_BUTTON_PRESSED        ; Right-click
     jz _finish
 
     ; We read a click input in this window!

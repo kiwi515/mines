@@ -39,7 +39,7 @@ Console_Init proc
         STD_INPUT_HANDLE ; nStdHandle
 
     mov dwStdIn, eax
-    mDebug_AssertTrue(dwStdIn > 0)
+    ASSERT_TRUE(dwStdIn > 0)
 
     ;
     ; stdout
@@ -48,7 +48,7 @@ Console_Init proc
         STD_OUTPUT_HANDLE ; nStdHandle
 
     mov dwStdOut, eax
-    mDebug_AssertTrue(dwStdOut > 0)
+    ASSERT_TRUE(dwStdOut > 0)
 
     ;
     ; stderr
@@ -57,7 +57,7 @@ Console_Init proc
         STD_ERROR_HANDLE ; nStdHandle
 
     mov dwStdErr, eax
-    mDebug_AssertTrue(dwStdErr > 0)
+    ASSERT_TRUE(dwStdErr > 0)
 
     ret
 Console_Init endp

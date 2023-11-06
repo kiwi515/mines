@@ -4,7 +4,19 @@
 ;=============================================================================;
 
 ;=============================================================================;
-; Name: mDebug_AssertTrue
+;
+; NOTE: For some reason, MASM doesnt like certain operations in these assert
+;       expressions, such as the not-equal operator (!=).
+;
+;       So, these assertions must be inverted. For example:
+;       ASSERT_TRUE(x != y) -> ASSERT_FALSE(x == y)
+;
+;       I cannot figure out why this happens, so I made two assert macros.
+;
+;=============================================================================;
+
+;=============================================================================;
+; Name: ASSERT_TRUE
 ;
 ; Details: Assertion macro that expects an expression to evaluate to TRUE.
 ; 
@@ -12,20 +24,16 @@
 ;
 ; Return: None
 ;=============================================================================;
-mDebug_AssertTrue macro exp
-    .IF exp
-    .ELSE
-        ; Show last Win32 error
-        invoke Debug_CheckErrorWin32
-        
-        ; Exit program
-        invoke ExitProcess, \
-            0 ; uExitCode
-    .ENDIF
+ASSERT_TRUE macro exp
+    .code
+        .IF exp
+        .ELSE
+            mDebug_FailAssert %@FileCur, %@Line, "&exp"
+        .ENDIF
 endm
 
 ;=============================================================================;
-; Name: mDebug_AssertFalse
+; Name: ASSERT_FALSE
 ;
 ; Details: Assertion macro that expects an expression to evaluate to FALSE.
 ; 
@@ -33,16 +41,45 @@ endm
 ;
 ; Return: None
 ;=============================================================================;
-mDebug_AssertFalse macro exp
+ASSERT_FALSE macro exp
     .IF exp
-        ; Show last Win32 error
-        invoke Debug_CheckErrorWin32
-        
+        mDebug_FailAssert %@FileCur, %@Line, "!&exp"
+    .ELSE
+    .ENDIF
+endm
+
+;=============================================================================;
+; Name: mDebug_FailAssert
+;
+; Details:
+; 
+; Arguments:
+;
+; Return: None
+;=============================================================================;
+mDebug_FailAssert macro file, line, exp
+    ; Variables must be local to avoid conflict
+    local sCaption
+    local sMsg
+    .data
+        ; Window caption
+        sCaption BYTE "Assertion Failed!",0
+        ; Window message
+        sMsg BYTE "Assertion """, exp, """ failed.",0Dh,0Ah, \
+            "File: &file, line &line.",0
+
+    ; Back to code
+   .code
+        ; Show message through message box
+        invoke MessageBox,     \
+            NULL,              \  ; hWnd
+            ADDR sMsg,         \  ; lpText
+            ADDR sCaption,     \  ; lpCaption
+            MB_ICONERROR OR MB_OK ; uType
+
         ; Exit program
         invoke ExitProcess, \
             0 ; uExitCode
-    .ELSE
-    .ENDIF
 endm
 
 ;=============================================================================;

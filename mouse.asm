@@ -56,7 +56,7 @@ Mouse_Init proc \
         ENABLE_EXTENDED_FLAGS ; dwMode
 
     ; Check for success
-    mDebug_AssertFalse(eax == 0)
+    ASSERT_FALSE(eax == 0)
     
     ; Track mouse events
     invoke SetConsoleMode, \
@@ -64,7 +64,7 @@ Mouse_Init proc \
         ENABLE_MOUSE_INPUT ; dwMode
 
     ; Check for success
-    mDebug_AssertFalse(eax == 0)
+    ASSERT_FALSE(eax == 0)
 
     ret
 Mouse_Init endp
@@ -100,7 +100,7 @@ Mouse_Poll proc \
         ADDR dwNumEvt        ; lpNumberOfEventsRead
 
     ; Check for success
-    mDebug_AssertFalse(eax == 0)
+    ASSERT_FALSE(eax == 0)
 
     ; Did we read anything?
     cmp dwNumEvt, 0

@@ -28,7 +28,7 @@ ASSERT_TRUE macro exp
     .code
         .IF exp
         .ELSE
-            mDebug_FailAssert %@FileCur, %@Line, "&exp"
+            _mDebug_FailAssert %@FileCur, %@Line, "&exp"
         .ENDIF
 endm
 
@@ -43,21 +43,23 @@ endm
 ;=============================================================================;
 ASSERT_FALSE macro exp
     .IF exp
-        mDebug_FailAssert %@FileCur, %@Line, "!&exp"
+        _mDebug_FailAssert %@FileCur, %@Line, "!&exp"
     .ELSE
     .ENDIF
 endm
 
 ;=============================================================================;
-; Name: mDebug_FailAssert
+; Name: _mDebug_FailAssert
 ;
-; Details:
+; Details: Private macro, for throwing an assertion error
 ; 
-; Arguments:
+; Arguments: file: Name of source file containing assertion
+;            line: Line in source file where assertion was written
+;            exp:  Boolean assertion which did not hold
 ;
 ; Return: None
 ;=============================================================================;
-mDebug_FailAssert macro file, line, exp
+_mDebug_FailAssert macro file, line, exp
     ; Variables must be local to avoid conflict
     local sCaption
     local sMsg

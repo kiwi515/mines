@@ -13,8 +13,8 @@ INCLUDE windows.inc
 .stack 4096
 
 .data
-; Window title for assertion failure
-sTitleAssert BYTE "Assertion Failed",0
+; Window title for Win32 error
+sTitleWin32 BYTE "Win32 Error",0
 
 .code
 ;=============================================================================;
@@ -57,7 +57,7 @@ Debug_CheckErrorWin32 proc \
     invoke MessageBox,     \
         NULL,              \  ; hWnd
         pErrMsg,           \  ; lpText
-        ADDR sTitleAssert, \  ; lpCaption
+        ADDR sTitleWin32,  \  ; lpCaption
         MB_ICONERROR OR MB_OK ; uType
 
     ; Release memory that Windows allocated

@@ -16,7 +16,7 @@ INCLUDE memory.inc
 
 .data
 ; Game board tiles
-bBoard     BYTE (kBoardWidth * kBoardHeight) DUP(?)
+bTiles     BYTE (kBoardWidth * kBoardHeight) DUP(?)
 ; Tile mine adjacency (pre-computed)
 bAdjacency BYTE (kBoardWidth * kBoardHeight) DUP(?)
 
@@ -33,8 +33,8 @@ bAdjacency BYTE (kBoardWidth * kBoardHeight) DUP(?)
 Board_Init proc
     ; Clear tile flags
     mMemory_Clear    \
-        ADDR bBoard, \ ; pbDst
-        SIZEOF bBoard  ; dwSize
+        ADDR bTiles, \ ; pbDst
+        SIZEOF bTiles  ; dwSize
 
     ; Clear tile adjacency
     mMemory_Clear        \
@@ -54,10 +54,6 @@ Board_Init endp
 ; Return: None
 ;=============================================================================;
 Board_Draw proc
-    ; Put cursor in top-left
-    invoke Console_SetPos, \
-        0, \ ; bPosX
-        0    ; bPosY
 
     ret
 Board_Draw endp

@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <MASM Include="src\const.asm" />
     <MASM Include="src\board.asm" />
     <MASM Include="src\console.asm" />
     <MASM Include="src\debug.asm" />

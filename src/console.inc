@@ -50,6 +50,18 @@ Console_SetColor proto, \
     bColorBG: BYTE
 
 ;=============================================================================;
+; Name: Console_SetAttr
+;
+; Details: Set text attributes
+; 
+; Arguments: wAttr: Character attributes
+;
+; Return: None
+;=============================================================================;
+Console_SetAttr proto, \
+    wAttr: BYTE
+
+;=============================================================================;
 ; Name: Console_Print
 ;
 ; Details: Prints string to stdout

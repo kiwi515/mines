@@ -118,7 +118,7 @@ Console_SetColor endp
 ; Return: None
 ;=============================================================================;
 Console_Print proc, \
-    msg: PTR BYTE
+    pbMsg: PTR BYTE
 
     local len: DWORD
 
@@ -126,14 +126,14 @@ Console_Print proc, \
     ; Get string length
     ;
     invoke Str_length, \
-        msg ; pString
+        pbMsg ; pString
 
     mov len, eax
 
     ; Write string to console
     invoke WriteConsole, \
         dwStdOut, \ ; hConsoleOutput
-        msg,      \ ; lpBuffer
+        pbMsg,    \ ; lpBuffer
         len,      \ ; nNumberOfCharsToWrite
         NULL,     \ ; lpNumberOfCharsWritten
         NULL        ; lpReserved

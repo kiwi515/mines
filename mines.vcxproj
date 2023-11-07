@@ -14,6 +14,7 @@
     <MASM Include="board.asm" />
     <MASM Include="console.asm" />
     <MASM Include="debug.asm" />
+    <MASM Include="game.asm" />
     <MASM Include="main.asm" />
     <MASM Include="memory.asm" />
     <MASM Include="mouse.asm" />
@@ -23,6 +24,7 @@
     <None Include="console.inc" />
     <None Include="const.inc" />
     <None Include="debug.inc" />
+    <None Include="game.inc" />
     <None Include="memory.inc" />
     <None Include="mouse.inc" />
     <None Include="windows.inc" />

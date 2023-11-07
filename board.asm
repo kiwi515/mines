@@ -20,9 +20,6 @@ bBoard     BYTE (kBoardWidth * kBoardHeight) DUP(?)
 ; Tile mine adjacency (pre-computed)
 bAdjacency BYTE (kBoardWidth * kBoardHeight) DUP(?)
 
-; Game state
-dwBoardState DWORD ?
-
 .code
 ;=============================================================================;
 ; Name: Board_Init
@@ -43,9 +40,6 @@ Board_Init proc
     mMemory_Clear        \
         ADDR bAdjacency, \ ; pbDst
         SIZEOF bAdjacency  ; dwSize
-
-    ; Set play state
-    mov dwBoardState, kStatePlay
 
     ret
 Board_Init endp

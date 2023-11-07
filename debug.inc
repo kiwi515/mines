@@ -25,11 +25,10 @@
 ; Return: None
 ;=============================================================================;
 ASSERT_TRUE macro exp
-    .code
-        .IF exp
-        .ELSE
-            _mDebug_FailAssert %@FileCur, %@Line, "&exp"
-        .ENDIF
+    .IF exp
+    .ELSE
+        _mDebug_FailAssert %@FileCur, %@Line, "&exp"
+    .ENDIF
 endm
 
 ;=============================================================================;

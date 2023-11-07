@@ -1,6 +1,10 @@
 ;=============================================================================;
-; main.asm - Program entrypoint
-; Author: Trevor Schiff
+; mines - Minesweeper for the MASM x86 assembler
+;
+; Author: Trevor Schiff (tschiff2020)
+;         3 November 2023
+;
+; Entry for the CSE3120 first assembly programming contest
 ;=============================================================================;
 
 INCLUDE Irvine32.inc

@@ -13,6 +13,9 @@ INCLUDE debug.inc
 .stack 4096
 
 .data
+; Window title
+sWndTitle BYTE "MASM Minesweeper",0
+
 ; stdin handle
 dwStdIn  DWORD ?
 ; stdout handle
@@ -32,30 +35,26 @@ dwStdErr DWORD ?
 ;=============================================================================;
 Console_Init proc
 
-    ;
-    ; stdin
-    ;
+    ; Set window title
+    invoke SetConsoleTitle, \
+        ADDR sWndTitle ; lpConsoleTitle
+    ASSERT_FALSE(eax == 0)
+
+    ; Acquire stdin
     invoke GetStdHandle, \
         STD_INPUT_HANDLE ; nStdHandle
-
     mov dwStdIn, eax
     ASSERT_TRUE(dwStdIn > 0)
 
-    ;
-    ; stdout
-    ;
+    ; Acquire stdout
     invoke GetStdHandle, \
         STD_OUTPUT_HANDLE ; nStdHandle
-
     mov dwStdOut, eax
     ASSERT_TRUE(dwStdOut > 0)
 
-    ;
-    ; stderr
-    ;
+    ; Acquire stderr
     invoke GetStdHandle, \
         STD_ERROR_HANDLE ; nStdHandle
-
     mov dwStdErr, eax
     ASSERT_TRUE(dwStdErr > 0)
 
@@ -65,7 +64,7 @@ Console_Init endp
 ;=============================================================================;
 ; Name: Console_SetPos
 ;
-; Details: Set cursor position
+; Details: Sets cursor position
 ; 
 ; Arguments: bPosX: Cursor X-position
 ;            bPosY: Cursor Y-position
@@ -88,7 +87,7 @@ Console_SetPos endp
 ;=============================================================================;
 ; Name: Console_SetColor
 ;
-; Details: Set text color
+; Details: Sets text color
 ; 
 ; Arguments: bColorFG: Foreground color
 ;            bColorBG: Background color
@@ -111,7 +110,7 @@ Console_SetColor endp
 ;=============================================================================;
 ; Name: Console_SetAttr
 ;
-; Details: Set text attributes
+; Details: Sets text attributes
 ; 
 ; Arguments: wAttr: Character attributes
 ;

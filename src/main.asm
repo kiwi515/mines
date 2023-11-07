@@ -10,6 +10,7 @@
 INCLUDE Irvine32.inc
 
 INCLUDE game.inc
+INCLUDE windows.inc
 
 .386
 .model flat,stdcall
@@ -26,6 +27,7 @@ INCLUDE game.inc
 ; Return: None
 ;=============================================================================;
 main proc
+
     ; Initialize
     invoke Game_Init
 

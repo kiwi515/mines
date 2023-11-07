@@ -24,7 +24,7 @@ Console_Init proto
 ;=============================================================================;
 ; Name: Console_SetPos
 ;
-; Details: Set cursor position
+; Details: Sets cursor position
 ; 
 ; Arguments: bPosX: Cursor X-position
 ;            bPosY: Cursor Y-position
@@ -38,7 +38,7 @@ Console_SetPos proto, \
 ;=============================================================================;
 ; Name: Console_SetColor
 ;
-; Details: Set text color
+; Details: Sets text color
 ; 
 ; Arguments: bColorFG: Foreground color
 ;            bColorBG: Background color
@@ -52,7 +52,7 @@ Console_SetColor proto, \
 ;=============================================================================;
 ; Name: Console_SetAttr
 ;
-; Details: Set text attributes
+; Details: Sets text attributes
 ; 
 ; Arguments: wAttr: Character attributes
 ;

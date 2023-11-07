@@ -18,6 +18,8 @@ INCLUDE debug.inc
 .data
 ; Game state
 dwGameState DWORD ?
+; Whether to draw the current frame
+bDoDraw BYTE ?
 
 ; Message box title
 sMsgTitle BYTE "Game Over",0
@@ -63,6 +65,7 @@ Game_Reset proc
 
     ; Reset game state
     mov dwGameState, kGameStatePlay
+    mov bDoDraw,     TRUE
 
     ret
 Game_Reset endp
@@ -78,9 +81,10 @@ Game_Reset endp
 ;=============================================================================;
 Game_Update proc
 
-    .IF dwGameState == kGameStatePlay
+    ; Call update function that corresponds to the current state
+    .IF (dwGameState == kGameStatePlay)
         invoke Game_UpdatePlay
-    .ELSEIF dwGameState == kGameStateWin || dwGameState == kGameStateLose
+    .ELSEIF (dwGameState == kGameStateWin || dwGameState == kGameStateLose)
         invoke Game_UpdateWinLose
     .ELSE
         ; Unreachable, invalid game state
@@ -100,6 +104,14 @@ Game_Update endp
 ; Return: None
 ;=============================================================================;
 Game_Draw proc
+    ; Should we draw this frame?
+    .IF (!bDoDraw)
+        ret
+    .ENDIF
+
+    ; Draw board
+    invoke Board_Draw
+
     ret
 Game_Draw endp
 
@@ -114,8 +126,10 @@ Game_Draw endp
 ;=============================================================================;
 Game_UpdatePlay proc
 
-    ; Whether to exit the game after this tick
-    local dwExitGame: DWORD
+    ;
+    ; Locals
+    ;
+    local dwExitGame: DWORD ; Exit the game after this tick
 
     ; By default, do not exit after this
     mov dwExitGame, FALSE
@@ -145,16 +159,21 @@ Game_UpdatePlay endp
 ;=============================================================================;
 Game_UpdateWinLose proc
 
-    ; Message box text
-    local pbMsg: PTR BYTE
-    ; Whether to exit the game after this tick
-    local dwExitGame: DWORD
+    ;
+    ; Locals
+    ;
+    local pbMsg: PTR BYTE ; Message box text
+    local dwExitGame: DWORD ; Exit the game after this tick
 
     ; By default, do not exit after this
     mov dwExitGame, FALSE
 
     ; Choose message box text based on game result
-    ; TODO
+    .IF (dwGameState == kGameStateWin)
+        mov pbMsg, OFFSET sMsgWin
+    .ELSE
+        mov pbMsg, OFFSET sMsgLose
+    .ENDIF
 
     ; Present message box
     invoke MessageBox,  \
@@ -166,15 +185,12 @@ Game_UpdateWinLose proc
     ;
     ; Handle button choice
     ;
-    .IF eax == IDYES
-        ; 'Yes' selected, play again
-        invoke Game_Reset
-    .ELSEIF eax == IDNO
-        ; 'No' selected, exit game
-        mov dwExitGame, TRUE
+    .IF (eax == IDYES)
+        invoke Game_Reset    ; 'Yes' selected, play again
+    .ELSEIF (eax == IDNO)
+        mov dwExitGame, TRUE ; 'No' selected, exit game
     .ELSE
-        ; Unreachable, invalid button ID
-        ASSERT_TRUE(FALSE)
+        ASSERT_TRUE(FALSE)   ; Unreachable, invalid button ID
     .ENDIF
 
     mov eax, dwExitGame

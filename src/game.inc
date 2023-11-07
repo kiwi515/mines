@@ -1,74 +1,75 @@
 ;=============================================================================;
-; console.inc - Console utilities
+; game.inc - Game state manager
 ; Author: Trevor Schiff
 ;=============================================================================;
 
-; stdin handle
-externdef dwStdIn:  DWORD
-; stdout handle
-externdef dwStdOut: DWORD
-; stderr handle
-externdef dwStdErr: DWORD
+; Game state list
+kGameStatePlay EQU 0 ; Game is ongoing
+kGameStateWin  EQU 1 ; Game was won
+kGameStateLose EQU 2 ; Game was lost
 
 ;=============================================================================;
-; Name: Console_Init
+; Name: Game_Init
 ;
-; Details: Initializes console handles
+; Details: Initializes game subsystems
 ; 
 ; Arguments: None
 ;
 ; Return: None
 ;=============================================================================;
-Console_Init proto
+Game_Init proto
 
 ;=============================================================================;
-; Name: Console_SetPos
+; Name: Game_Reset
 ;
-; Details: Set cursor position
+; Details: Resets game subsystems (for playing again)
 ; 
-; Arguments: bPosX: Cursor X-position
-;            bPosY: Cursor Y-position
+; Arguments: None
 ;
 ; Return: None
 ;=============================================================================;
-Console_SetPos proto, \
-    bPosX: BYTE,      \
-    bPosY: BYTE
+Game_Reset proto
 
 ;=============================================================================;
-; Name: Console_SetColor
+; Name: Game_Update
 ;
-; Details: Set text color
+; Details: Steps game state forward once
 ; 
-; Arguments: bColorFG: Foreground color
-;            bColorBG: Background color
+; Arguments: None
+;
+; Return: Whether program should exit
+;=============================================================================;
+Game_Update proto
+
+;=============================================================================;
+; Name: Game_Draw
+;
+; Details: Renders game state
+; 
+; Arguments: None
 ;
 ; Return: None
 ;=============================================================================;
-Console_SetColor proto, \
-    bColorFG: BYTE,     \
-    bColorBG: BYTE
+Game_Draw proto
 
 ;=============================================================================;
-; Name: Console_Print
+; Name: Game_UpdatePlay
 ;
-; Details: Prints string to stdout
+; Details: Update game in 'play' state
 ; 
-; Arguments: pbMsg: Message to print
+; Arguments: None
 ;
-; Return: None
+; Return: Whether program should exit
 ;=============================================================================;
-Console_Print proto, \
-    pbMsg: PTR BYTE
+Game_UpdatePlay proto
 
 ;=============================================================================;
-; Name: Console_PrintChar
+; Name: Game_UpdateWinLose
 ;
-; Details: Prints character to stdout
+; Details: Update game in 'win' or 'lose' state
 ; 
-; Arguments: bChar: Character to print
+; Arguments: None
 ;
-; Return: None
+; Return: Whether program should exit
 ;=============================================================================;
-Console_PrintChar proto, \
-    bChar: BYTE
+Game_UpdateWinLose proto

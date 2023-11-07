@@ -1,20 +1,26 @@
 ;=============================================================================;
-; board.inc - Game board
+; board.asm - Game board
 ; Author: Trevor Schiff
 ;=============================================================================;
 
-; Game state list
-kStatePlay EQU 0 ; Game is ongoing
-kStateWin  EQU 1 ; Game was won
-kStateLose EQU 2 ; Game was lost
+INCLUDE Irvine32.inc
+INCLUDE board.inc
 
-; Tile flags
-kTileFlagClear EQU 1 ; Tile has been cleared
-kTileFlagMine  EQU 2 ; Tile contains a mine
+INCLUDE const.inc
+INCLUDE console.inc
+INCLUDE memory.inc
 
-; Game state
-externdef dwBoardState: DWORD
+.386
+.model flat,stdcall
+.stack 4096
 
+.data
+; Game board tiles
+bTiles     BYTE (kBoardWidth * kBoardHeight) DUP(?)
+; Tile mine adjacency (pre-computed)
+bAdjacency BYTE (kBoardWidth * kBoardHeight) DUP(?)
+
+.code
 ;=============================================================================;
 ; Name: Board_Init
 ;
@@ -24,7 +30,19 @@ externdef dwBoardState: DWORD
 ;
 ; Return: None
 ;=============================================================================;
-Board_Init proto
+Board_Init proc
+    ; Clear tile flags
+    mMemory_Clear    \
+        ADDR bTiles, \ ; pbDst
+        SIZEOF bTiles  ; dwSize
+
+    ; Clear tile adjacency
+    mMemory_Clear        \
+        ADDR bAdjacency, \ ; pbDst
+        SIZEOF bAdjacency  ; dwSize
+
+    ret
+Board_Init endp
 
 ;=============================================================================;
 ; Name: Board_Draw
@@ -35,4 +53,9 @@ Board_Init proto
 ;
 ; Return: None
 ;=============================================================================;
-Board_Draw proto
+Board_Draw proc
+
+    ret
+Board_Draw endp
+
+end

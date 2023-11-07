@@ -109,6 +109,30 @@ Console_SetColor proc \
 Console_SetColor endp
 
 ;=============================================================================;
+; Name: Console_SetAttr
+;
+; Details: Set text attributes
+; 
+; Arguments: wAttr: Character attributes
+;
+; Return: None
+;=============================================================================;
+Console_SetAttr proc \
+    USES eax,        \
+    wAttr: BYTE
+
+    ; Apply to all future text
+    invoke SetConsoleTextAttribute, \
+        dwStdOut, \ ; hConsoleOutput
+        wAttr       ; wAttributes
+
+    ; Check for success
+    ASSERT_FALSE(eax == 0)
+
+    ret
+Console_SetAttr endp
+
+;=============================================================================;
 ; Name: Console_Print
 ;
 ; Details: Prints string to stdout

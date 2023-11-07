@@ -12,7 +12,7 @@ INCLUDE const.inc
 
 .data
 ; Background color table. Index using (bTiles[n] & kTileFlagClear)
-kBgColTable WORD \
+kBgColTable WORD  \
     kBgColHidden, \
     kBgColClear
 

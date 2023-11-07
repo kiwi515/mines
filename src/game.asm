@@ -176,10 +176,10 @@ Game_UpdateWinLose proc
     .ENDIF
 
     ; Present message box
-    invoke MessageBox,  \
-        NULL,           \     ; hWnd
-        pbMsg,          \     ; lpText
-        ADDR sMsgTitle, \     ; lpCaption
+    invoke MessageBox,
+        NULL,                 ; hWnd
+        pbMsg,                ; lpText
+        ADDR sMsgTitle,       ; lpCaption
         MB_ICONERROR OR MB_OK ; uType
 
     ;

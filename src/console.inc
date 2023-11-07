@@ -31,8 +31,8 @@ Console_Init proto
 ;
 ; Return: None
 ;=============================================================================;
-Console_SetPos proto, \
-    bPosX: BYTE,      \
+Console_SetPos proto,
+    bPosX: BYTE,
     bPosY: BYTE
 
 ;=============================================================================;
@@ -45,8 +45,8 @@ Console_SetPos proto, \
 ;
 ; Return: None
 ;=============================================================================;
-Console_SetColor proto, \
-    bColorFG: BYTE,     \
+Console_SetColor proto,
+    bColorFG: BYTE,
     bColorBG: BYTE
 
 ;=============================================================================;
@@ -58,7 +58,7 @@ Console_SetColor proto, \
 ;
 ; Return: None
 ;=============================================================================;
-Console_SetAttr proto, \
+Console_SetAttr proto,
     wAttr: BYTE
 
 ;=============================================================================;
@@ -70,7 +70,7 @@ Console_SetAttr proto, \
 ;
 ; Return: None
 ;=============================================================================;
-Console_Print proto, \
+Console_Print proto,
     pbMsg: PTR BYTE
 
 ;=============================================================================;
@@ -82,5 +82,5 @@ Console_Print proto, \
 ;
 ; Return: None
 ;=============================================================================;
-Console_PrintChar proto, \
+Console_PrintChar proto,
     bChar: BYTE

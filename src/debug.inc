@@ -72,14 +72,14 @@ _mDebug_FailAssert macro file, line, exp
     ; Back to code
    .code
         ; Show message through message box
-        invoke MessageBox,     \
-            NULL,              \  ; hWnd
-            ADDR sMsg,         \  ; lpText
-            ADDR sCaption,     \  ; lpCaption
+        invoke MessageBox,
+            NULL,                 ; hWnd
+            ADDR sMsg,            ; lpText
+            ADDR sCaption,        ; lpCaption
             MB_ICONERROR OR MB_OK ; uType
 
         ; Exit program
-        invoke ExitProcess, \
+        invoke ExitProcess,
             0 ; uExitCode
 endm
 

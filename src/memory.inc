@@ -14,9 +14,9 @@
 ;
 ; Return: None
 ;=============================================================================;
-Memory_Copy proto     \
-    pbDst:  PTR BYTE, \
-    pbSrc:  PTR BYTE, \
+Memory_Copy proto,
+    pbDst:  PTR BYTE,
+    pbSrc:  PTR BYTE,
     dwSize: DWORD
 
 ;=============================================================================;
@@ -30,9 +30,9 @@ Memory_Copy proto     \
 ;
 ; Return: None
 ;=============================================================================;
-Memory_Set proto      \
-    pbDst:  PTR BYTE, \
-    bVal:   BYTE,     \
+Memory_Set proto,
+    pbDst:  PTR BYTE,
+    bVal:   BYTE,
     dwSize: DWORD
 
 ;=============================================================================;
@@ -46,8 +46,8 @@ Memory_Set proto      \
 ; Return: None
 ;=============================================================================;
 mMemory_Clear macro pbDst, dwSize
-    invoke Memory_Set, \
-        pbDst, \ ; pbDst
-        0,     \ ; bVal
-        dwSize   ; dwSize
+    invoke Memory_Set,
+        pbDst, ; pbDst
+        0,     ; bVal
+        dwSize ; dwSize
 endm

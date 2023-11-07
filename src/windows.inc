@@ -39,9 +39,9 @@ CONSOLE_FONT_INFOEX ENDS
 ;
 ; Return: If the function succeeds, the return value is nonzero.
 ;=============================================================================;
-GetCurrentConsoleFontEx proto, \
-    hConsoleOutput: DWORD,     \
-    bMaximumWindow: DWORD,     \
+GetCurrentConsoleFontEx proto,
+    hConsoleOutput: DWORD,
+    bMaximumWindow: DWORD,
     lpConsoleCurrentFontEx: PTR CONSOLE_FONT_INFOEX
 
 ;=============================================================================;
@@ -61,7 +61,7 @@ GetCurrentConsoleFontEx proto, \
 ;
 ; Return: If the function succeeds, the return value is nonzero.
 ;=============================================================================;
-SetCurrentConsoleFontEx proto, \
-    hConsoleOutput: DWORD,     \
-    bMaximumWindow: DWORD,     \
+SetCurrentConsoleFontEx proto,
+    hConsoleOutput: DWORD,
+    bMaximumWindow: DWORD,
     lpConsoleCurrentFontEx: PTR CONSOLE_FONT_INFOEX

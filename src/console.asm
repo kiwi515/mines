@@ -36,24 +36,24 @@ dwStdErr DWORD ?
 Console_Init proc
 
     ; Set window title
-    invoke SetConsoleTitle, \
+    invoke SetConsoleTitle,
         ADDR sWndTitle ; lpConsoleTitle
     ASSERT_FALSE(eax == 0)
 
     ; Acquire stdin
-    invoke GetStdHandle, \
+    invoke GetStdHandle,
         STD_INPUT_HANDLE ; nStdHandle
     mov dwStdIn, eax
     ASSERT_TRUE(dwStdIn > 0)
 
     ; Acquire stdout
-    invoke GetStdHandle, \
+    invoke GetStdHandle,
         STD_OUTPUT_HANDLE ; nStdHandle
     mov dwStdOut, eax
     ASSERT_TRUE(dwStdOut > 0)
 
     ; Acquire stderr
-    invoke GetStdHandle, \
+    invoke GetStdHandle,
         STD_ERROR_HANDLE ; nStdHandle
     mov dwStdErr, eax
     ASSERT_TRUE(dwStdErr > 0)
@@ -71,9 +71,8 @@ Console_Init endp
 ;
 ; Return: None
 ;=============================================================================;
-Console_SetPos proc \
-    USES edx,       \
-    bPosX: BYTE,    \
+Console_SetPos proc USES edx,
+    bPosX: BYTE,
     bPosY: BYTE
 
     ; Call down to Irvine
@@ -94,9 +93,8 @@ Console_SetPos endp
 ;
 ; Return: None
 ;=============================================================================;
-Console_SetColor proc \
-    USES eax,         \
-    bColorFG: BYTE,   \
+Console_SetColor proc USES eax,
+    bColorFG: BYTE,
     bColorBG: BYTE
 
     ; Call down to Irvine
@@ -116,14 +114,13 @@ Console_SetColor endp
 ;
 ; Return: None
 ;=============================================================================;
-Console_SetAttr proc \
-    USES eax,        \
+Console_SetAttr proc USES eax,
     wAttr: BYTE
 
-    ; Apply to all future text
-    invoke SetConsoleTextAttribute, \
-        dwStdOut, \ ; hConsoleOutput
-        wAttr       ; wAttributes
+    ; Apply attributes to all future text
+    invoke SetConsoleTextAttribute,
+        dwStdOut, ; hConsoleOutput
+        wAttr     ; wAttributes
 
     ; Check for success
     ASSERT_FALSE(eax == 0)
@@ -140,26 +137,20 @@ Console_SetAttr endp
 ;
 ; Return: None
 ;=============================================================================;
-Console_Print proc, \
+Console_Print proc USES eax,
     pbMsg: PTR BYTE
 
-    local len: DWORD
-
-    ;
     ; Get string length
-    ;
-    invoke Str_length, \
+    invoke Str_length,
         pbMsg ; pString
 
-    mov len, eax
-
     ; Write string to console
-    invoke WriteConsole, \
-        dwStdOut, \ ; hConsoleOutput
-        pbMsg,    \ ; lpBuffer
-        len,      \ ; nNumberOfCharsToWrite
-        NULL,     \ ; lpNumberOfCharsWritten
-        NULL        ; lpReserved
+    invoke WriteConsole,
+        dwStdOut, ; hConsoleOutput
+        pbMsg,    ; lpBuffer
+        eax,      ; nNumberOfCharsToWrite
+        NULL,     ; lpNumberOfCharsWritten
+        NULL      ; lpReserved
     
     ret
 Console_Print endp
@@ -173,16 +164,16 @@ Console_Print endp
 ;
 ; Return: None
 ;=============================================================================;
-Console_PrintChar proc, \
+Console_PrintChar proc,
     bChar: BYTE
 
     ; Write single character to console
-    invoke WriteConsole, \
-        dwStdOut,     \ ; hConsoleOutput
-        ADDR bChar,   \ ; lpBuffer
-        SIZEOF bChar, \ ; nNumberOfCharsToWrite
-        NULL,         \ ; lpNumberOfCharsWritten
-        NULL            ; lpReserved
+    invoke WriteConsole,
+        dwStdOut,     ; hConsoleOutput
+        ADDR bChar,   ; lpBuffer
+        SIZEOF bChar, ; nNumberOfCharsToWrite
+        NULL,         ; lpNumberOfCharsWritten
+        NULL          ; lpReserved
 
     ret
 Console_PrintChar endp

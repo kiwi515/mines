@@ -24,10 +24,9 @@ INCLUDE const.inc
 ;
 ; Return: None
 ;=============================================================================;
-Memory_Copy proc      \
-    USES eax ebx edx, \
-    pbDst:  PTR BYTE, \
-    pbSrc:  PTR BYTE, \
+Memory_Copy proc USES eax ebx edx,
+    pbDst:  PTR BYTE,
+    pbSrc:  PTR BYTE,
     dwSize: DWORD
 
     ; Load parameters
@@ -66,10 +65,9 @@ Memory_Copy endp
 ;
 ; Return: None
 ;=============================================================================;
-Memory_Set proc       \
-    USES eax ebx,     \
-    pbDst:  PTR BYTE, \
-    bVal:   BYTE,     \
+Memory_Set proc USES eax ebx,
+    pbDst:  PTR BYTE,
+    bVal:   BYTE,
     dwSize: DWORD
 
     ; Load parameters

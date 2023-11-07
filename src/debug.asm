@@ -27,8 +27,7 @@ sTitleWin32 BYTE "Win32 Error",0
 ;
 ; Return: None
 ;=============================================================================;
-Debug_CheckErrorWin32 proc \
-    USES eax
+Debug_CheckErrorWin32 proc USES eax
 
     local dwFlags:     DWORD
     local dwMessageId: DWORD
@@ -44,26 +43,26 @@ Debug_CheckErrorWin32 proc \
               OR FORMAT_MESSAGE_FROM_SYSTEM       ; Use system message table
 
     ; Get message string
-    invoke FormatMessage, \
-        dwFlags,      \ ; dwFlags
-        NULL,         \ ; lpSource
-        dwMessageId,  \ ; dwMessageId
-        0,            \ ; dwLangaugeId
-        ADDR pErrMsg, \ ; lpBuffer
-        0,            \ ; nSize
-        NULL            ; Arguments
+    invoke FormatMessage,
+        dwFlags,      ; dwFlags
+        NULL,         ; lpSource
+        dwMessageId,  ; dwMessageId
+        0,            ; dwLangaugeId
+        ADDR pErrMsg, ; lpBuffer
+        0,            ; nSize
+        NULL          ; Arguments
 
     ; Show message through message box
-    invoke MessageBox,     \
-        NULL,              \  ; hWnd
-        pErrMsg,           \  ; lpText
-        ADDR sTitleWin32,  \  ; lpCaption
+    invoke MessageBox,
+        NULL,                 ; hWnd
+        pErrMsg,              ; lpText
+        ADDR sTitleWin32,     ; lpCaption
         MB_ICONERROR OR MB_OK ; uType
 
     ; Release memory that Windows allocated
-    invoke LocalFree, pErrMsg
+    invoke LocalFree,
+        pErrMsg ; hMem
 
-_no_error:
     ret
 Debug_CheckErrorWin32 endp
 

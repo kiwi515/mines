@@ -31,8 +31,7 @@ dwNumEvt DWORD 0
 ;
 ; Return: None
 ;=============================================================================;
-Mouse_Init proc \ 
-    USES eax
+Mouse_Init proc USES eax
 
     ;
     ; For some reason, I have to disable Win10 "Quick Edit" mode
@@ -49,16 +48,16 @@ Mouse_Init proc \
     ;
 
     ; Disable "Quick Edit" mode
-    invoke SetConsoleMode, \
-        dwStdIn, \            ; hConsoleHandle
+    invoke SetConsoleMode,
+        dwStdIn,              ; hConsoleHandle
         ENABLE_EXTENDED_FLAGS ; dwMode
 
     ; Check for success
     ASSERT_FALSE(eax == 0)
     
     ; Track mouse events
-    invoke SetConsoleMode, \
-        dwStdIn, \         ; hConsoleHandle
+    invoke SetConsoleMode,
+        dwStdIn,           ; hConsoleHandle
         ENABLE_MOUSE_INPUT ; dwMode
 
     ; Check for success
@@ -85,11 +84,11 @@ Mouse_Poll proc
         SIZEOF stMouseEvt  ; dwSize
 
     ; Try reading mouse event
-    invoke ReadConsoleInput, \
-        dwStdIn,           \ ; hConsoleInput
-        ADDR stMouseEvt,   \ ; lpBuffer
-        LENGTH stMouseEvt, \ ; nLength
-        ADDR dwNumEvt        ; lpNumberOfEventsRead
+    invoke ReadConsoleInput,
+        dwStdIn,           ; hConsoleInput
+        ADDR stMouseEvt,   ; lpBuffer
+        LENGTH stMouseEvt, ; nLength
+        ADDR dwNumEvt      ; lpNumberOfEventsRead
 
     ; Check for success
     ASSERT_FALSE(eax == 0)

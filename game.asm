@@ -68,7 +68,7 @@ Game_Reset proc
 Game_Reset endp
 
 ;=============================================================================;
-; Name: Game_Tick
+; Name: Game_Update
 ;
 ; Details: Steps game state forward once
 ; 
@@ -76,19 +76,19 @@ Game_Reset endp
 ;
 ; Return: Whether program should exit
 ;=============================================================================;
-Game_Tick proc
+Game_Update proc
 
     .IF dwGameState == kGameStatePlay
-        invoke Game_TickPlay
+        invoke Game_UpdatePlay
     .ELSEIF dwGameState == kGameStateWin || dwGameState == kGameStateLose
-        invoke Game_TickWinLose
+        invoke Game_UpdateWinLose
     .ELSE
         ; Unreachable, invalid game state
         ASSERT_TRUE(FALSE)
     .ENDIF
 
     ret
-Game_Tick endp
+Game_Update endp
 
 ;=============================================================================;
 ; Name: Game_Draw
@@ -104,7 +104,7 @@ Game_Draw proc
 Game_Draw endp
 
 ;=============================================================================;
-; Name: Game_TickPlay
+; Name: Game_UpdatePlay
 ;
 ; Details: Update game in 'play' state
 ; 
@@ -112,7 +112,7 @@ Game_Draw endp
 ;
 ; Return: Whether program should exit
 ;=============================================================================;
-Game_TickPlay proc
+Game_UpdatePlay proc
 
     ; Whether to exit the game after this tick
     local dwExitGame: DWORD
@@ -132,10 +132,10 @@ Game_TickPlay proc
 
     mov eax, dwExitGame
     ret
-Game_TickPlay endp
+Game_UpdatePlay endp
 
 ;=============================================================================;
-; Name: Game_TickWinLose
+; Name: Game_UpdateWinLose
 ;
 ; Details: Update game in 'win' or 'lose' state
 ; 
@@ -143,7 +143,7 @@ Game_TickPlay endp
 ;
 ; Return: Whether program should exit
 ;=============================================================================;
-Game_TickWinLose proc
+Game_UpdateWinLose proc
 
     ; Message box text
     local pbMsg: PTR BYTE
@@ -179,6 +179,6 @@ Game_TickWinLose proc
 
     mov eax, dwExitGame
     ret
-Game_TickWinLose endp
+Game_UpdateWinLose endp
 
 end

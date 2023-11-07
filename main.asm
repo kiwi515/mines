@@ -31,7 +31,7 @@ main proc
 
 _loop:
     ; Game logic step
-    invoke Game_Tick
+    invoke Game_Update
 
     ; Should we exit?
     cmp eax, TRUE

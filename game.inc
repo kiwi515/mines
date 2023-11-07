@@ -31,7 +31,7 @@ Game_Init proto
 Game_Reset proto
 
 ;=============================================================================;
-; Name: Game_Tick
+; Name: Game_Update
 ;
 ; Details: Steps game state forward once
 ; 
@@ -39,7 +39,7 @@ Game_Reset proto
 ;
 ; Return: Whether program should exit
 ;=============================================================================;
-Game_Tick proto
+Game_Update proto
 
 ;=============================================================================;
 ; Name: Game_Draw
@@ -53,7 +53,7 @@ Game_Tick proto
 Game_Draw proto
 
 ;=============================================================================;
-; Name: Game_TickPlay
+; Name: Game_UpdatePlay
 ;
 ; Details: Update game in 'play' state
 ; 
@@ -61,10 +61,10 @@ Game_Draw proto
 ;
 ; Return: Whether program should exit
 ;=============================================================================;
-Game_TickPlay proto
+Game_UpdatePlay proto
 
 ;=============================================================================;
-; Name: Game_TickWinLose
+; Name: Game_UpdateWinLose
 ;
 ; Details: Update game in 'win' or 'lose' state
 ; 
@@ -72,4 +72,4 @@ Game_TickPlay proto
 ;
 ; Return: Whether program should exit
 ;=============================================================================;
-Game_TickWinLose proto
+Game_UpdateWinLose proto

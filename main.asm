@@ -4,7 +4,7 @@
 ; Author: Trevor Schiff (tschiff2020)
 ;         3 November 2023
 ;
-; Entry for the CSE3120 first assembly programming contest
+; Entry for the first CSE3120 assembly programming contest
 ;=============================================================================;
 
 INCLUDE Irvine32.inc

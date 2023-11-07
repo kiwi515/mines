@@ -11,23 +11,23 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <MASM Include="board.asm" />
-    <MASM Include="console.asm" />
-    <MASM Include="debug.asm" />
-    <MASM Include="game.asm" />
-    <MASM Include="main.asm" />
-    <MASM Include="memory.asm" />
-    <MASM Include="mouse.asm" />
+    <MASM Include="src\board.asm" />
+    <MASM Include="src\console.asm" />
+    <MASM Include="src\debug.asm" />
+    <MASM Include="src\game.asm" />
+    <MASM Include="src\main.asm" />
+    <MASM Include="src\memory.asm" />
+    <MASM Include="src\mouse.asm" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="board.inc" />
-    <None Include="console.inc" />
-    <None Include="const.inc" />
-    <None Include="debug.inc" />
-    <None Include="game.inc" />
-    <None Include="memory.inc" />
-    <None Include="mouse.inc" />
-    <None Include="windows.inc" />
+    <None Include="src\board.inc" />
+    <None Include="src\console.inc" />
+    <None Include="src\const.inc" />
+    <None Include="src\debug.inc" />
+    <None Include="src\game.inc" />
+    <None Include="src\memory.inc" />
+    <None Include="src\mouse.inc" />
+    <None Include="src\windows.inc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{4164AA65-1EF9-4E69-899B-D1BED776070B}</ProjectGuid>

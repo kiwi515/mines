@@ -30,4 +30,7 @@ kFgColTable WORD \
 ; Index using bAdjacency[n] to get which character to draw.
 kAdjCharTable BYTE "0123456789"
 
+; Tile font size
+kTileFontSize COORD <30, 30>
+
 end

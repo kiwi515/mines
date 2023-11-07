@@ -23,6 +23,8 @@ externdef kAdjCharTable: BYTE
 ; Game configuration constants
 ;
 
+; Tile font size
+externdef kTileFontSize: COORD
 ; Board dimensions (9x9)
 kBoardWidth  EQU 9
 kBoardHeight EQU 9

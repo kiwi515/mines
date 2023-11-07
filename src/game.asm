@@ -9,6 +9,7 @@ INCLUDE game.inc
 INCLUDE console.inc
 INCLUDE board.inc
 INCLUDE mouse.inc
+INCLUDE const.inc
 INCLUDE debug.inc
 
 .386
@@ -43,8 +44,13 @@ Game_Init proc
     invoke Console_Init
     invoke Mouse_Init
 
+    ; Set custom font size
+    invoke Console_SetFontSize, kTileFontSize
+
     ; Reset game state
     invoke Game_Reset
+
+    invoke ExitProcess, 0
 
     ret
 Game_Init endp

@@ -7,6 +7,8 @@ INCLUDE Irvine32.inc
 INCLUDE console.inc
 
 INCLUDE debug.inc
+INCLUDE windows.inc
+INCLUDE memory.inc
 
 .386
 .model flat,stdcall
@@ -84,26 +86,51 @@ Console_SetPos proc USES edx,
 Console_SetPos endp
 
 ;=============================================================================;
-; Name: Console_SetColor
+; Name: Console_SetFontSize
 ;
-; Details: Sets text color
+; Details: Sets size of the current font
 ; 
-; Arguments: bColorFG: Foreground color
-;            bColorBG: Background color
+; Arguments: stSize: Font size (width, height)
 ;
 ; Return: None
 ;=============================================================================;
-Console_SetColor proc USES eax,
-    bColorFG: BYTE,
-    bColorBG: BYTE
+Console_SetFontSize proc,
+    stSize: COORD
 
-    ; Call down to Irvine
-    mov al, bColorFG
-    mov ah, bColorBG
-    call SetTextColor
+    ; Font info structure
+    local stInfo: CONSOLE_FONT_INFOEX
+
+    ; Per MS docs:
+    ; "This member must be set to sizeof(CONSOLE_FONT_INFOEX)
+    ; before calling GetCurrentConsoleFontEx or it will fail."
+    mov stInfo.cbSize, SIZEOF stInfo
+
+    ; Get current font info
+    invoke GetCurrentConsoleFontEx,
+        dwStdOut,   ; hConsoleOutput
+        FALSE,      ; bMaximumWindow
+        ADDR stInfo ; lpConsoleCurrentFontEx
+
+    ; Check for success
+    ASSERT_FALSE(eax == 0)
+
+    ; Insert new font size
+    invoke Memory_Copy,
+        ADDR stInfo.dwFontSize,  ; pbDst
+        ADDR stSize,             ; pbSrc
+        SIZEOF stInfo.dwFontSize ; dwSize
+
+    ; Set modified font info
+    invoke SetCurrentConsoleFontEx,
+        dwStdOut,   ; hConsoleOutput
+        FALSE,      ; bMaximumWindow
+        ADDR stInfo ; lpConsoleCurrentFontEx
+
+    ; Check for success
+    ASSERT_FALSE(eax == 0)
 
     ret
-Console_SetColor endp
+Console_SetFontSize endp
 
 ;=============================================================================;
 ; Name: Console_SetAttr

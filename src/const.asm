@@ -17,20 +17,21 @@ kBgColTable BYTE  \
     kBgColClear
 
 ; Foreground color table. Index using dwNumMine.
-kFgColTable BYTE \
-    kFgColOne,   \
-    kFgColTwo,   \
-    kFgColThree, \
-    kFgColFour,  \
-    kFgColFive,  \
-    kFgColSix,   \
-    kFgColSeven, \
+kFgColTable BYTE  \
+    kBgColHidden, \ ; Zero adjacency
+    kFgColOne,    \
+    kFgColTwo,    \
+    kFgColThree,  \
+    kFgColFour,   \
+    kFgColFive,   \
+    kFgColSix,    \
+    kFgColSeven,  \
     kFgColEight
 
 ; Index using dwNumMine to get which character to draw over the tile.
-kAdjCharTable BYTE " 123456789",0
+kAdjCharTable BYTE " 12345678"
 
 ; Tile font size
-kTileFontSize COORD <36, 36>
+kTileFontSize COORD <76, 76>
 
 end

@@ -21,8 +21,8 @@ kBoardHeight EQU 9
 kNumMine EQU 10
 
 ; Text background colors
-kBgColHidden EQU lightGray ; Hidden tile
-kBgColClear  EQU gray      ; Cleared (revealed) tile
+kBgColHidden EQU white ; Hidden tile
+kBgColClear  EQU lightGray      ; Cleared (revealed) tile
 
 ; Text foreground colors
 kFgColMine  EQU black        ; Mine

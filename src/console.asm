@@ -137,45 +137,31 @@ Console_SetFontSize endp
 ;=============================================================================;
 ; Name: Console_SetAttr
 ;
-; Details: Sets text attributes
-; 
-; Arguments: wAttr: Character attributes
-;
-; Return: None
-;=============================================================================;
-Console_SetAttr proc USES eax,
-    wAttr: BYTE
-
-    ; Apply attributes to all future text
-    invoke SetConsoleTextAttribute,
-        dwStdOut, ; hConsoleOutput
-        wAttr     ; wAttributes
-
-    ; Check for success
-    ASSERT_FALSE(eax == 0)
-
-    ret
-Console_SetAttr endp
-
-;=============================================================================;
-; Name: Console_SetColor
-;
 ; Details: Sets text and background colors
 ; 
 ; Arguments: bColorFG: Foreground color
 ;            bColorBG: Background color
+;            bGrid:    Enable grid
 ;
 ; Return: None
 ;=============================================================================;
-Console_SetColor proc USES eax,
+Console_SetAttr proc USES eax ebx ecx edx,
     bColorFG: BYTE,
-    bColorBG: BYTE
+    bColorBG: BYTE,
+    bGrid:    BYTE
 
     ; Construct text attribute
     mov ax, 0
     or al, bColorBG
     shl al, 4
     or al, bColorFG
+
+    ; Optional grid
+    .IF (bGrid)
+        or ax, COMMON_LVB_GRID_HORIZONTAL \
+            OR COMMON_LVB_GRID_LVERTICAL \
+            OR COMMON_LVB_GRID_RVERTICAL
+    .ENDIF
 
     ; Apply attributes to all future text
     invoke SetConsoleTextAttribute,
@@ -186,7 +172,7 @@ Console_SetColor proc USES eax,
     ASSERT_FALSE(eax == 0)
 
     ret
-Console_SetColor endp
+Console_SetAttr endp
 
 ;=============================================================================;
 ; Name: Console_Print

@@ -59,6 +59,43 @@ Board_Randomize proc
 Board_Randomize endp
 
 ;=============================================================================;
+; Name: Board_Debug
+;
+; Details: Truly randomizes the contents of the board, for debugging purposes.
+; 
+; Arguments: None
+;
+; Return: None
+;=============================================================================;
+Board_Debug proc USES eax ebx
+    
+    ; Loop counter
+    local i: DWORD
+
+    ; Current tile pointer
+    mov ebx, OFFSET stBoardTiles
+
+    .WHILE (i < (kBoardWidth * kBoardHeight))
+        ; Randomize tile flags
+        mov eax, kTileFlagClear OR kTileFlagMine
+        call RandomRange
+        mov (BOARD_TILE_S PTR [ebx]).dwFlags, eax
+
+        ; Randomize tile adjacency
+        mov eax, 3*3
+        call RandomRange
+        mov (BOARD_TILE_S PTR [ebx]).dwNumMine, eax
+
+        ; Increment tile pointer
+        add ebx, SIZEOF BOARD_TILE_S
+        ; Increment counter
+        inc i
+    .ENDW
+
+    ret
+Board_Debug endp
+
+;=============================================================================;
 ; Name: Board_Draw
 ;
 ; Details: Draws board state to the console
@@ -96,9 +133,10 @@ Board_Draw proc USES eax ebx ecx edx
                 ;
 
                 ; Set text color for this tile
-                invoke Console_SetColor,
-                    kFgColTable[ecx], ; bColorFG
-                    kBgColTable[ecx]  ; bColorBG
+                invoke Console_SetAttr,
+                    kFgColTable[edx], ; bColorFG
+                    kBgColTable[ecx], ; bColorBG
+                    TRUE              ; bGrid
 
                 ; Print cell character
                 invoke Console_PrintChar,
@@ -109,9 +147,10 @@ Board_Draw proc USES eax ebx ecx edx
                 ;
 
                 ; Use hidden color constant (& no FG color)
-                invoke Console_SetColor,
-                    0,           ; bColorFG
-                    kBgColHidden ; bColorBG
+                invoke Console_SetAttr,
+                    0,            ; bColorFG
+                    kBgColHidden, ; bColorBG
+                    TRUE          ; bGrid
 
                 ; Empty space to fill cell with BG color
                 invoke Console_PrintChar,
@@ -130,9 +169,10 @@ Board_Draw proc USES eax ebx ecx edx
     .ENDW
 
     ; Restore color
-    invoke Console_SetColor,
+    invoke Console_SetAttr,
         white, ; bColorFG
-        black  ; bColorBG
+        black, ; bColorBG
+        FALSE  ; bGrid
 
     ret
 Board_Draw endp

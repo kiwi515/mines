@@ -45,6 +45,17 @@ Board_Reset proto
 Board_Randomize proto
 
 ;=============================================================================;
+; Name: Board_Debug
+;
+; Details: Truly randomizes the contents of the board, for debugging purposes.
+; 
+; Arguments: None
+;
+; Return: None
+;=============================================================================;
+Board_Debug proto
+
+;=============================================================================;
 ; Name: Board_Draw
 ;
 ; Details: Draws board state to the console

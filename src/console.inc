@@ -48,18 +48,20 @@ Console_SetFontSize proto,
     stSize: COORD
 
 ;=============================================================================;
-; Name: Console_SetColor
+; Name: Console_SetAttr
 ;
 ; Details: Sets text and background colors
 ; 
 ; Arguments: bColorFG: Foreground color
 ;            bColorBG: Background color
+;            bGrid:    Enable grid
 ;
 ; Return: None
 ;=============================================================================;
-Console_SetColor proto,
+Console_SetAttr proto,
     bColorFG: BYTE,
-    bColorBG: BYTE
+    bColorBG: BYTE,
+    bGrid:    BYTE
 
 ;=============================================================================;
 ; Name: Console_Print

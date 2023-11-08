@@ -68,6 +68,8 @@ Game_Reset proc
     ; Reset board
     invoke Board_Reset
 
+    invoke Board_Debug
+
     ; Draw new board
     mov bDoDraw, TRUE
 

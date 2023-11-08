@@ -3,41 +3,27 @@
 ; Author: Trevor Schiff
 ;=============================================================================;
 
-;
-; Text color tables
-;
-
-; Background color table. Index using (bTiles[n] & kTileFlagClear)
+; Background color table. Index using (dwFlags & kTileFlagClear).
 externdef kBgColTable: WORD
-; Foreground color table. Index using bAdjacency[n]
+; Foreground color table. Index using dwNumMine.
 externdef kFgColTable: WORD
-
-;
-; Tile adjacency character table
-;
-
-; Index using bAdjacency[n] to get which character to draw.
+; Index using dwNumMine to get which character to draw.
 externdef kAdjCharTable: BYTE
-
-;
-; Game configuration constants
-;
 
 ; Tile font size
 externdef kTileFontSize: COORD
+
 ; Board dimensions (9x9)
 kBoardWidth  EQU 9
 kBoardHeight EQU 9
+
 ; Number of mines in the board
 kNumMine EQU 10
-
-;
-; Text color constants
-;
 
 ; Text background colors
 kBgColHidden EQU lightGray ; Hidden tile
 kBgColClear  EQU gray      ; Cleared (revealed) tile
+
 ; Text foreground colors
 kFgColMine  EQU black        ; Mine
 kFgColOne   EQU lightBlue    ; One adjacent mine

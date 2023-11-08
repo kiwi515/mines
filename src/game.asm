@@ -1,5 +1,5 @@
 ;=============================================================================;
-; game.asm - Game state manager
+; game.asm - Game manager
 ; Author: Trevor Schiff
 ;=============================================================================;
 
@@ -17,8 +17,6 @@ INCLUDE debug.inc
 .stack 4096
 
 .data
-; Game state
-dwGameState DWORD ?
 ; Whether to draw the current frame
 bDoDraw BYTE ?
 
@@ -32,7 +30,7 @@ sMsgLose  BYTE "Better luck next time! Try again?",0
 ;=============================================================================;
 ; Name: Game_Init
 ;
-; Details: Initializes game subsystems
+; Details: Initializes game system
 ; 
 ; Arguments: None
 ;
@@ -50,15 +48,13 @@ Game_Init proc
     ; Reset game state
     invoke Game_Reset
 
-    invoke ExitProcess, 0
-
     ret
 Game_Init endp
 
 ;=============================================================================;
 ; Name: Game_Reset
 ;
-; Details: Resets game subsystems (for playing again)
+; Details: Resets game system (for playing again)
 ; 
 ; Arguments: None
 ;
@@ -66,12 +62,14 @@ Game_Init endp
 ;=============================================================================;
 Game_Reset proc
 
+    ; Seed Irvines RNG
+    invoke Randomize
+    
     ; Reset board
-    invoke Board_Init
+    invoke Board_Reset
 
-    ; Reset game state
-    mov dwGameState, kGameStatePlay
-    mov bDoDraw,     TRUE
+    ; Draw new board
+    mov bDoDraw, TRUE
 
     ret
 Game_Reset endp
@@ -79,7 +77,7 @@ Game_Reset endp
 ;=============================================================================;
 ; Name: Game_Update
 ;
-; Details: Steps game state forward once
+; Details: Steps game system forward once
 ; 
 ; Arguments: None
 ;
@@ -88,10 +86,10 @@ Game_Reset endp
 Game_Update proc
 
     ; Call update function that corresponds to the current state
-    .IF (dwGameState == kGameStatePlay)
-        invoke Game_UpdatePlay
-    .ELSEIF (dwGameState == kGameStateWin || dwGameState == kGameStateLose)
-        invoke Game_UpdateWinLose
+    .IF (dwBoardState == kBoardStatePlay)
+        invoke _Game_UpdatePlay
+    .ELSEIF (dwBoardState == kBoardStateWin || dwBoardState == kBoardStateLose)
+        invoke _Game_UpdateWinLose
     .ELSE
         ; Unreachable, invalid game state
         ASSERT_TRUE(FALSE)
@@ -103,17 +101,21 @@ Game_Update endp
 ;=============================================================================;
 ; Name: Game_Draw
 ;
-; Details: Renders game state
+; Details: Renders game system
 ; 
 ; Arguments: None
 ;
 ; Return: None
 ;=============================================================================;
 Game_Draw proc
+
     ; Should we draw this frame?
     .IF (!bDoDraw)
         ret
     .ENDIF
+
+    ; Clear last frame
+    invoke Clrscr
 
     ; Draw board
     invoke Board_Draw
@@ -122,19 +124,16 @@ Game_Draw proc
 Game_Draw endp
 
 ;=============================================================================;
-; Name: Game_UpdatePlay
+; Name: _Game_UpdatePlay
 ;
-; Details: Update game in 'play' state
+; Details: Update system in 'play' state
 ; 
 ; Arguments: None
 ;
 ; Return: Whether program should exit
 ;=============================================================================;
-Game_UpdatePlay proc
+_Game_UpdatePlay proc PRIVATE
 
-    ;
-    ; Locals
-    ;
     local dwExitGame: DWORD ; Exit the game after this tick
 
     ; By default, do not exit after this
@@ -146,36 +145,29 @@ Game_UpdatePlay proc
     ; Run game logic
     ; TODO
 
-    ; Clear screen and re-draw board
-    invoke Clrscr
-    invoke Board_Draw
-
     mov eax, dwExitGame
     ret
-Game_UpdatePlay endp
+_Game_UpdatePlay endp
 
 ;=============================================================================;
-; Name: Game_UpdateWinLose
+; Name: _Game_UpdateWinLose
 ;
-; Details: Update game in 'win' or 'lose' state
+; Details: Update system in 'win' or 'lose' state
 ; 
 ; Arguments: None
 ;
 ; Return: Whether program should exit
 ;=============================================================================;
-Game_UpdateWinLose proc
+_Game_UpdateWinLose proc PRIVATE
 
-    ;
-    ; Locals
-    ;
-    local pbMsg: PTR BYTE ; Message box text
-    local dwExitGame: DWORD ; Exit the game after this tick
+    local pbMsg:      PTR BYTE ; Message box text
+    local dwExitGame: DWORD    ; Exit the game after this tick
 
     ; By default, do not exit after this
     mov dwExitGame, FALSE
 
     ; Choose message box text based on game result
-    .IF (dwGameState == kGameStateWin)
+    .IF (dwBoardState == kBoardStateWin)
         mov pbMsg, OFFSET sMsgWin
     .ELSE
         mov pbMsg, OFFSET sMsgLose
@@ -188,9 +180,7 @@ Game_UpdateWinLose proc
         ADDR sMsgTitle,       ; lpCaption
         MB_ICONERROR OR MB_OK ; uType
 
-    ;
     ; Handle button choice
-    ;
     .IF (eax == IDYES)
         invoke Game_Reset    ; 'Yes' selected, play again
     .ELSEIF (eax == IDNO)
@@ -201,6 +191,6 @@ Game_UpdateWinLose proc
 
     mov eax, dwExitGame
     ret
-Game_UpdateWinLose endp
+_Game_UpdateWinLose endp
 
 end

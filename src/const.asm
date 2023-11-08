@@ -11,12 +11,12 @@ INCLUDE const.inc
 .stack 4096
 
 .data
-; Background color table. Index using (bTiles[n] & kTileFlagClear)
+; Background color table. Index using (dwFlags & kTileFlagClear).
 kBgColTable WORD  \
     kBgColHidden, \
     kBgColClear
 
-; Foreground color table. Index using bAdjacency[n]
+; Foreground color table. Index using dwNumMine.
 kFgColTable WORD \
     kFgColOne,   \
     kFgColTwo,   \
@@ -27,7 +27,7 @@ kFgColTable WORD \
     kFgColSeven, \
     kFgColEight
 
-; Index using bAdjacency[n] to get which character to draw.
+; Index using dwNumMine to get which character to draw.
 kAdjCharTable BYTE "0123456789"
 
 ; Tile font size

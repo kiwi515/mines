@@ -40,24 +40,28 @@ Console_Init proc
     ; Set window title
     invoke SetConsoleTitle,
         ADDR sWndTitle ; lpConsoleTitle
+    ; Check for success
     ASSERT_FALSE(eax == 0)
 
     ; Acquire stdin
     invoke GetStdHandle,
         STD_INPUT_HANDLE ; nStdHandle
     mov dwStdIn, eax
+    ; Check for success
     ASSERT_TRUE(dwStdIn > 0)
 
     ; Acquire stdout
     invoke GetStdHandle,
         STD_OUTPUT_HANDLE ; nStdHandle
     mov dwStdOut, eax
+    ; Check for success
     ASSERT_TRUE(dwStdOut > 0)
 
     ; Acquire stderr
     invoke GetStdHandle,
         STD_ERROR_HANDLE ; nStdHandle
     mov dwStdErr, eax
+    ; Check for success
     ASSERT_TRUE(dwStdErr > 0)
 
     ret
@@ -110,7 +114,6 @@ Console_SetFontSize proc,
         dwStdOut,   ; hConsoleOutput
         FALSE,      ; bMaximumWindow
         ADDR stInfo ; lpConsoleCurrentFontEx
-
     ; Check for success
     ASSERT_FALSE(eax == 0)
 
@@ -125,7 +128,6 @@ Console_SetFontSize proc,
         dwStdOut,   ; hConsoleOutput
         FALSE,      ; bMaximumWindow
         ADDR stInfo ; lpConsoleCurrentFontEx
-
     ; Check for success
     ASSERT_FALSE(eax == 0)
 
@@ -178,6 +180,9 @@ Console_Print proc USES eax,
         eax,      ; nNumberOfCharsToWrite
         NULL,     ; lpNumberOfCharsWritten
         NULL      ; lpReserved
+
+    ; Check for success
+    ASSERT_FALSE(eax == 0)
     
     ret
 Console_Print endp
@@ -201,6 +206,9 @@ Console_PrintChar proc,
         SIZEOF bChar, ; nNumberOfCharsToWrite
         NULL,         ; lpNumberOfCharsWritten
         NULL          ; lpReserved
+
+    ; Check for success
+    ASSERT_FALSE(eax == 0)
 
     ret
 Console_PrintChar endp

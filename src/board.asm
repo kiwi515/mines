@@ -15,39 +15,53 @@ INCLUDE memory.inc
 .stack 4096
 
 .data
-; Game board tiles
-bTiles     BYTE (kBoardWidth * kBoardHeight) DUP(?)
-; Tile mine adjacency (pre-computed)
-bAdjacency BYTE (kBoardWidth * kBoardHeight) DUP(?)
+; Board tiles
+stBoardTiles BOARD_TILE_S (kBoardWidth * kBoardHeight) DUP(<>)
+; Board state
+dwBoardState DWORD ?
 
 .code
 ;=============================================================================;
-; Name: Board_Init
+; Name: Board_Reset
 ;
-; Details: Initializes game state
+; Details: Resets board state
 ; 
 ; Arguments: None
 ;
 ; Return: None
 ;=============================================================================;
-Board_Init proc
-    ; Clear tile flags
-    mMemory_Clear    \
-        ADDR bTiles, \ ; pbDst
-        SIZEOF bTiles  ; dwSize
+Board_Reset proc
 
-    ; Clear tile adjacency
-    mMemory_Clear        \
-        ADDR bAdjacency, \ ; pbDst
-        SIZEOF bAdjacency  ; dwSize
+    ; Clear tile data
+    mMemory_Clear          \
+        ADDR stBoardTiles, \ ; pbDst
+        SIZEOF stBoardTiles  ; dwSize
+
+    ; Set board state
+    mov dwBoardState, kBoardStatePlay
 
     ret
-Board_Init endp
+Board_Reset endp
+
+;=============================================================================;
+; Name: Board_Randomize
+;
+; Details: Randomly places mines across the board. Cleared tiles are
+;          not considered, so this can be called after the initial click. 
+; 
+; Arguments: None
+;
+; Return: None
+;=============================================================================;
+Board_Randomize proc
+
+    ret
+Board_Randomize endp
 
 ;=============================================================================;
 ; Name: Board_Draw
 ;
-; Details: Draws game state to the console
+; Details: Draws board state to the console
 ; 
 ; Arguments: None
 ;

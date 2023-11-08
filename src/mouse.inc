@@ -3,9 +3,6 @@
 ; Author: Trevor Schiff
 ;=============================================================================;
 
-; Whether a click input is ready for the game
-externdef bMouseClicked: BYTE
-
 ;=============================================================================;
 ; Name: Mouse_Init
 ;
@@ -24,6 +21,6 @@ Mouse_Init proto
 ; 
 ; Arguments: None
 ;
-; Return: None
+; Return: Whether a click input was read
 ;=============================================================================;
 Mouse_Poll proto

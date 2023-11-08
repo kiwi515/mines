@@ -51,7 +51,6 @@ Mouse_Init proc USES eax
     invoke SetConsoleMode,
         dwStdIn,              ; hConsoleHandle
         ENABLE_EXTENDED_FLAGS ; dwMode
-
     ; Check for success
     ASSERT_FALSE(eax == 0)
     
@@ -59,7 +58,6 @@ Mouse_Init proc USES eax
     invoke SetConsoleMode,
         dwStdIn,           ; hConsoleHandle
         ENABLE_MOUSE_INPUT ; dwMode
-
     ; Check for success
     ASSERT_FALSE(eax == 0)
 
@@ -89,7 +87,6 @@ Mouse_Poll proc
         ADDR stMouseEvt,   ; lpBuffer
         LENGTH stMouseEvt, ; nLength
         ADDR dwNumEvt      ; lpNumberOfEventsRead
-
     ; Check for success
     ASSERT_FALSE(eax == 0)
 

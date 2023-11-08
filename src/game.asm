@@ -122,6 +122,8 @@ Game_Draw proc
     ; Draw board
     invoke Board_Draw
 
+    mov bDoDraw, FALSE
+
     ret
 Game_Draw endp
 

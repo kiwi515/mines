@@ -144,8 +144,10 @@ _Game_UpdatePlay proc PRIVATE
     ; Poll input
     invoke Mouse_Poll
 
-    ; Run game logic
-    ; TODO
+    ; Process input
+    .IF (eax == TRUE)
+        ; TODO
+    .ENDIF
 
     mov eax, dwExitGame
     ret

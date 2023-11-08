@@ -67,7 +67,72 @@ Board_Randomize endp
 ;
 ; Return: None
 ;=============================================================================;
-Board_Draw proc
+Board_Draw proc USES eax ebx ecx edx
+
+    local i: DWORD ; Board row
+    local j: DWORD ; Board column
+
+    ; Current tile pointer
+    mov ebx, OFFSET stBoardTiles
+
+    mov i, 0
+    .WHILE (i < kBoardHeight)
+        ; Jump cursor to new row
+        invoke Console_SetPos,
+            0,            ; bPosX
+            BYTE PTR [i]  ; bPosY
+
+        mov j, 0
+        .WHILE (j < kBoardWidth)
+            ; Load flags of current tile
+            mov ecx, (BOARD_TILE_S PTR [ebx]).dwFlags
+            ; Load adjacency of current tile
+            mov edx, (BOARD_TILE_S PTR [ebx]).dwNumMine
+
+            ; Is the tile revealed?
+            .IF (ecx & kTileFlagClear)
+                ;
+                ; Revealed tile
+                ;
+
+                ; Set text color for this tile
+                invoke Console_SetColor,
+                    kFgColTable[ecx], ; bColorFG
+                    kBgColTable[ecx]  ; bColorBG
+
+                ; Print cell character
+                invoke Console_PrintChar,
+                    kAdjCharTable[edx] ; bChar
+            .ELSE
+                ;
+                ; Hidden tile
+                ;
+
+                ; Use hidden color constant (& no FG color)
+                invoke Console_SetColor,
+                    0,           ; bColorFG
+                    kBgColHidden ; bColorBG
+
+                ; Empty space to fill cell with BG color
+                invoke Console_PrintChar,
+                    ' ' ; bChar
+            .ENDIF
+
+            ; Increment tile pointer
+            add ebx, SIZEOF BOARD_TILE_S
+
+            ; Increment counter
+            inc j
+        .ENDW
+
+        ; Increment counter
+        inc i
+    .ENDW
+
+    ; Restore color
+    invoke Console_SetColor,
+        white, ; bColorFG
+        black  ; bColorBG
 
     ret
 Board_Draw endp

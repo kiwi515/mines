@@ -32,8 +32,9 @@ main proc
     invoke Game_Init
 
 _loop:
-    ; Game logic step
+    ; Game step
     invoke Game_Update
+    invoke Game_Draw
 
     ; Should we exit?
     cmp eax, TRUE

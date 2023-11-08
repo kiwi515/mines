@@ -35,7 +35,7 @@ dwStdErr DWORD ?
 ;
 ; Return: None
 ;=============================================================================;
-Console_Init proc
+Console_Init proc USES eax
 
     ; Set window title
     invoke SetConsoleTitle,
@@ -77,13 +77,13 @@ Console_Init endp
 ;
 ; Return: None
 ;=============================================================================;
-Console_SetPos proc USES edx,
+Console_SetPos proc USES eax edx,
     bPosX: BYTE,
     bPosY: BYTE
 
     ; Call down to Irvine
-    mov dh, bPosX
-    mov dl, bPosY
+    mov dl, bPosX
+    mov dh, bPosY
     call Gotoxy
     
     ret
@@ -98,7 +98,7 @@ Console_SetPos endp
 ;
 ; Return: None
 ;=============================================================================;
-Console_SetFontSize proc,
+Console_SetFontSize proc USES eax,
     stSize: COORD
 
     ; Font info structure
@@ -158,6 +158,37 @@ Console_SetAttr proc USES eax,
 Console_SetAttr endp
 
 ;=============================================================================;
+; Name: Console_SetColor
+;
+; Details: Sets text and background colors
+; 
+; Arguments: bColorFG: Foreground color
+;            bColorBG: Background color
+;
+; Return: None
+;=============================================================================;
+Console_SetColor proc USES eax,
+    bColorFG: BYTE,
+    bColorBG: BYTE
+
+    ; Construct text attribute
+    mov ax, 0
+    or al, bColorBG
+    shl al, 4
+    or al, bColorFG
+
+    ; Apply attributes to all future text
+    invoke SetConsoleTextAttribute,
+        dwStdOut, ; hConsoleOutput
+        ax        ; wAttributes
+
+    ; Check for success
+    ASSERT_FALSE(eax == 0)
+
+    ret
+Console_SetColor endp
+
+;=============================================================================;
 ; Name: Console_Print
 ;
 ; Details: Prints string to stdout
@@ -196,7 +227,7 @@ Console_Print endp
 ;
 ; Return: None
 ;=============================================================================;
-Console_PrintChar proc,
+Console_PrintChar proc USES eax,
     bChar: BYTE
 
     ; Write single character to console

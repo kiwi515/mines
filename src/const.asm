@@ -12,12 +12,12 @@ INCLUDE const.inc
 
 .data
 ; Background color table. Index using (dwFlags & kTileFlagClear).
-kBgColTable WORD  \
+kBgColTable BYTE  \
     kBgColHidden, \
     kBgColClear
 
 ; Foreground color table. Index using dwNumMine.
-kFgColTable WORD \
+kFgColTable BYTE \
     kFgColOne,   \
     kFgColTwo,   \
     kFgColThree, \
@@ -27,10 +27,10 @@ kFgColTable WORD \
     kFgColSeven, \
     kFgColEight
 
-; Index using dwNumMine to get which character to draw.
-kAdjCharTable BYTE "0123456789"
+; Index using dwNumMine to get which character to draw over the tile.
+kAdjCharTable BYTE " 123456789",0
 
 ; Tile font size
-kTileFontSize COORD <30, 30>
+kTileFontSize COORD <36, 36>
 
 end

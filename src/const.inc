@@ -4,9 +4,9 @@
 ;=============================================================================;
 
 ; Background color table. Index using (dwFlags & kTileFlagClear).
-externdef kBgColTable: WORD
+externdef kBgColTable: BYTE
 ; Foreground color table. Index using dwNumMine.
-externdef kFgColTable: WORD
+externdef kFgColTable: BYTE
 ; Index using dwNumMine to get which character to draw.
 externdef kAdjCharTable: BYTE
 

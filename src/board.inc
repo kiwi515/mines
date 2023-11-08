@@ -4,8 +4,9 @@
 ;=============================================================================;
 
 ; Possible tile flags
-kTileFlagClear EQU  1b ; Tile has been cleared
-kTileFlagMine  EQU 10b ; Tile contains a mine
+kTileFlagClear   EQU   1b ; Tile has been cleared
+kTileFlagFlagged EQU  10b ; Tile has been flagged
+kTileFlagMine    EQU 100b ; Tile contains a mine
 
 ; Possible board states
 kBoardStatePlay EQU 0 ; Ongoing
@@ -67,9 +68,23 @@ Board_Debug proto
 Board_Draw proto
 
 ;=============================================================================;
+; Name: Board_GetTile
+;
+; Details: Gets pointer to tile on the board
+; 
+; Arguments: bPosX: Tile X position.
+;            bPosY: Tile Y position.
+;
+; Return: Pointer to tile (if possible, otherwise NULL)
+;=============================================================================;
+Board_GetTile proto,
+    bPosX: BYTE,
+    bPosY: BYTE
+
+;=============================================================================;
 ; Name: Board_ModifyTile
 ;
-; Details: Attempt to modify tile on the board
+; Details: Attempts to modify tile on the board
 ; 
 ; Arguments: pstMouseEvt: Pointer to mouse input event that caused
 ;                         this tile modification.
@@ -78,3 +93,17 @@ Board_Draw proto
 ;=============================================================================;
 Board_ModifyTile proto,
     pstMouseEvt: PTR INPUT_RECORD
+
+;=============================================================================;
+; Name: Board_PropogateTileClear
+;
+; Details: Propogates clearing of "zero" tile to all adjacent zero tiles.
+; 
+; Arguments: bPosX: Tile X position.
+;            bPosY: Tile Y position.
+;
+; Return: None
+;=============================================================================;
+Board_PropogateTileClear proto,
+    bPosX: BYTE,
+    bPosY: BYTE

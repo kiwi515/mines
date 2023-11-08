@@ -10,6 +10,7 @@ INCLUDE const.inc
 INCLUDE console.inc
 INCLUDE memory.inc
 INCLUDE windows.inc
+INCLUDE debug.inc
 
 .386
 .model flat,stdcall
@@ -179,6 +180,42 @@ Board_Draw proc USES eax ebx ecx edx
 Board_Draw endp
 
 ;=============================================================================;
+; Name: Board_GetTile
+;
+; Details: Gets pointer to tile on the board
+; 
+; Arguments: bPosX: Tile X position.
+;            bPosY: Tile Y position.
+;
+; Return: Pointer to tile (if possible, otherwise NULL)
+;=============================================================================;
+Board_GetTile proc USES ebx ecx,
+    bPosX: BYTE,
+    bPosY: BYTE
+
+    ; Find the index of the tile that was clicked
+    mov cx, kBoardWidth
+    movzx eax, bPosY
+    mul cx           ; Y * WIDTH
+    movzx ecx, bPosX
+    add eax, ecx     ; X + (Y * WIDTH)
+
+    ; Index bounds check
+    .IF (eax > kBoardWidth * kBoardHeight)
+        ; Tile out of bounds
+        mov eax, NULL
+        ret
+    .ENDIF
+
+    ; Get pointer to tile
+    mov ebx, SIZEOF BOARD_TILE_S
+    mul bx                       ; eax = Offset into stBoardTiles
+    add eax, OFFSET stBoardTiles ; Offset base address
+
+    ret
+Board_GetTile endp
+
+;=============================================================================;
 ; Name: Board_ModifyTile
 ;
 ; Details: Attempt to modify tile on the board
@@ -188,51 +225,105 @@ Board_Draw endp
 ;
 ; Return: Whether the board should be re-drawn
 ;=============================================================================;
-Board_ModifyTile proc USES ebx,
+Board_ModifyTile proc USES ebx ecx edx,
     pstMouseEvt: PTR INPUT_RECORD
 
-    local dwPosX:        DWORD ; Selected tile X-position
-    local dwPosY:        DWORD ; Selected tile Y-position
     local dwButtonState: DWORD ; Mouse click flags
+    local dwTileFlags:   DWORD ; Tile flags
+    local dwTileNumMine: DWORD ; Number of adjacent mines
+    
+    ; Tile position
+    local bPosX: BYTE
+    local bPosY: BYTE
 
-    ;
     ; Load mouse input data
-    ;
-    mov eax, pstMouseEvt
-    
-    movzx ebx, (INPUT_RECORD PTR [eax]).Event.dwMousePosition.X
-    mov dwPosX, ebx
-    
-    movzx ebx, (INPUT_RECORD PTR [eax]).Event.dwMousePosition.Y
-    mov dwPosY, ebx
-    
-    mov ebx, (INPUT_RECORD PTR [eax]).Event.dwButtonState
-    mov dwButtonState, ebx
+    mov ebx, pstMouseEvt
 
-    ; Find the index of the tile that was clicked
-    mov bx,  kBoardWidth
-    mov eax, dwPosY
-    mul bx
-    add eax, dwPosX
+    ; Save mouse button state
+    mov ecx, (INPUT_RECORD PTR [ebx]).Event.dwButtonState
+    mov dwButtonState, ecx
+    
+    ; Convert positions from WORD to BYTE
+    movzx ecx, (INPUT_RECORD PTR [ebx]).Event.dwMousePosition.X
+    movzx edx, (INPUT_RECORD PTR [ebx]).Event.dwMousePosition.Y
+    ; Position high bytes should never be set (board is not big enough)
+    ; Need to make sure though, because if they were, that would break this
+    ASSERT_TRUE(ch == 0 && dh == 0)
+    mov bPosX, cl
+    mov bPosY, dl
 
-    ; Index bounds check
-    .IF (eax > kBoardWidth * kBoardHeight)
+    ; Get pointer to tile
+    invoke Board_GetTile,
+        bPosX, ; bPosX
+        bPosY  ; bPosY
+
+    ; Does the tile not exist?
+    .IF (eax == 0)
+        ; Board state was not modified
         mov eax, FALSE
         ret
     .ENDIF
 
-    ; Get pointer to tile
-    mov eax, [OFFSET stBoardTiles] + eax * SIZEOF BOARD_TILE_S
+    ; Load tile flags/mine count
+    mov ebx, (BOARD_TILE_S PTR [eax]).dwFlags
+    mov dwTileFlags, ebx
+    mov ebx, (BOARD_TILE_S PTR [eax]).dwNumMine
+    mov dwTileNumMine, ebx
 
-    .IF (dwButtonState & FROM_LEFT_1ST_BUTTON_PRESSED)
-        ; Left-click to reveal tiles
-    .ELSEIF (dwButtonState & RIGHTMOST_BUTTON_PRESSED)
-        ; Right click to flag tiles
+    ; If the tile is already revealed, nothing to do
+    .IF (dwTileFlags & kTileFlagClear)
+        ; Board state was not modified
+        mov eax, FALSE
+        ret
     .ENDIF
+
+    ;
+    ; TODO!!!!
+    ; Make functions for clear/flag tile.
+    ; PropgateTileClear should be replaced by recursibe Board_ClearTile
+    ;
+
+    ; Left-click to reveal tiles
+    .IF (dwButtonState & FROM_LEFT_1ST_BUTTON_PRESSED)
+        or dwTileFlags, kTileFlagClear
+
+        ; If we just cleared a blank tile,
+        ; we must also clear all adjacent blank tiles.
+        .IF (dwTileNumMine == 0)
+            invoke Board_PropogateTileClear,
+                bPosX, ; bPosX
+                bPosY ; bPosY
+        .ENDIF
+
+    ; Right click to flag tiles (toggle)
+    .ELSEIF (dwButtonState & RIGHTMOST_BUTTON_PRESSED)
+        xor dwTileFlags, kTileFlagFlagged
+    .ENDIF
+
+    ; Save tile flags after modification
+    mov ebx, dwTileFlags
+    mov (BOARD_TILE_S PTR [eax]).dwFlags, ebx
 
     ; The board state was modified, re-draw next frame
     mov eax, TRUE
     ret
 Board_ModifyTile endp
+
+;=============================================================================;
+; Name: Board_PropogateTileClear
+;
+; Details: Propogates clearing of "zero" tile to all adjacent zero tiles.
+; 
+; Arguments: bPosX: Tile X position.
+;            bPosY: Tile Y position.
+;
+; Return: None
+;=============================================================================;
+Board_PropogateTileClear proc,
+    bPosX: BYTE,
+    bPosY: BYTE
+    
+    ret
+Board_PropogateTileClear endp
 
 end

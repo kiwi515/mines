@@ -65,3 +65,16 @@ Board_Debug proto
 ; Return: None
 ;=============================================================================;
 Board_Draw proto
+
+;=============================================================================;
+; Name: Board_ModifyTile
+;
+; Details: Attempt to modify tile on the board
+; 
+; Arguments: pstMouseEvt: Pointer to mouse input event that caused
+;                         this tile modification.
+;
+; Return: Whether the board should be re-drawn
+;=============================================================================;
+Board_ModifyTile proto,
+    pstMouseEvt: PTR INPUT_RECORD

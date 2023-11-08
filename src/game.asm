@@ -18,7 +18,7 @@ INCLUDE debug.inc
 
 .data
 ; Whether to draw the current frame
-bDoDraw BYTE ?
+dwDoDraw DWORD ?
 
 ; Message box title
 sMsgTitle BYTE "Game Over",0
@@ -43,7 +43,7 @@ Game_Init proc
     invoke Mouse_Init
 
     ; Set custom font size
-    invoke Console_SetFontSize, kTileFontSize
+    ; invoke Console_SetFontSize, kTileFontSize
 
     ; Reset game state
     invoke Game_Reset
@@ -69,7 +69,7 @@ Game_Reset proc
     invoke Board_Reset
 
     ; Draw new board
-    mov bDoDraw, TRUE
+    mov dwDoDraw, TRUE
 
     ret
 Game_Reset endp
@@ -110,7 +110,7 @@ Game_Update endp
 Game_Draw proc
 
     ; Should we draw this frame?
-    .IF (!bDoDraw)
+    .IF (!dwDoDraw)
         ret
     .ENDIF
 
@@ -120,7 +120,7 @@ Game_Draw proc
     ; Draw board
     invoke Board_Draw
 
-    mov bDoDraw, FALSE
+    mov dwDoDraw, FALSE
 
     ret
 Game_Draw endp
@@ -134,19 +134,23 @@ Game_Draw endp
 ;
 ; Return: Whether program should exit
 ;=============================================================================;
-_Game_UpdatePlay proc PRIVATE
+_Game_UpdatePlay proc
 
     local dwExitGame: DWORD ; Exit the game after this tick
 
     ; By default, do not exit after this
     mov dwExitGame, FALSE
 
-    ; Poll input
+    ; Poll mouse input
     invoke Mouse_Poll
 
-    ; Process input
-    .IF (eax == TRUE)
-        ; TODO
+    ; Process mouse input
+    .IF (eax != NULL)
+        invoke Board_ModifyTile,
+            eax ; pstMouseEvt
+
+        ; Board tells us if it should be redrawn
+        mov dwDoDraw, eax
     .ENDIF
 
     mov eax, dwExitGame
@@ -162,7 +166,7 @@ _Game_UpdatePlay endp
 ;
 ; Return: Whether program should exit
 ;=============================================================================;
-_Game_UpdateWinLose proc PRIVATE
+_Game_UpdateWinLose proc
 
     local pbMsg:      PTR BYTE ; Message box text
     local dwExitGame: DWORD    ; Exit the game after this tick

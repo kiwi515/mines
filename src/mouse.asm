@@ -71,7 +71,7 @@ Mouse_Init endp
 ; 
 ; Arguments: None
 ;
-; Return: Whether a click input was read
+; Return: Mouse input event (if applicable, otherwise NULL)
 ;=============================================================================;
 Mouse_Poll proc
 
@@ -105,12 +105,12 @@ Mouse_Poll proc
     jz _no_input
 
     ; We read a click input in this window!
-    mov eax, TRUE
+    mov eax, OFFSET stMouseEvt
     ret
 
     ; No click input :(
 _no_input:
-    mov eax, FALSE
+    mov eax, NULL
     ret
 Mouse_Poll endp
 

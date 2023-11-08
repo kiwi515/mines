@@ -21,6 +21,6 @@ Mouse_Init proto
 ; 
 ; Arguments: None
 ;
-; Return: Whether a click input was read
+; Return: Mouse input event (if applicable, otherwise NULL)
 ;=============================================================================;
 Mouse_Poll proto

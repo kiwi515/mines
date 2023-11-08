@@ -9,6 +9,7 @@ INCLUDE board.inc
 INCLUDE const.inc
 INCLUDE console.inc
 INCLUDE memory.inc
+INCLUDE windows.inc
 
 .386
 .model flat,stdcall
@@ -176,5 +177,62 @@ Board_Draw proc USES eax ebx ecx edx
 
     ret
 Board_Draw endp
+
+;=============================================================================;
+; Name: Board_ModifyTile
+;
+; Details: Attempt to modify tile on the board
+; 
+; Arguments: pstMouseEvt: Pointer to mouse input event that caused
+;                         this tile modification.
+;
+; Return: Whether the board should be re-drawn
+;=============================================================================;
+Board_ModifyTile proc USES ebx,
+    pstMouseEvt: PTR INPUT_RECORD
+
+    local dwPosX:        DWORD ; Selected tile X-position
+    local dwPosY:        DWORD ; Selected tile Y-position
+    local dwButtonState: DWORD ; Mouse click flags
+
+    ;
+    ; Load mouse input data
+    ;
+    mov eax, pstMouseEvt
+    
+    movzx ebx, (INPUT_RECORD PTR [eax]).Event.dwMousePosition.X
+    mov dwPosX, ebx
+    
+    movzx ebx, (INPUT_RECORD PTR [eax]).Event.dwMousePosition.Y
+    mov dwPosY, ebx
+    
+    mov ebx, (INPUT_RECORD PTR [eax]).Event.dwButtonState
+    mov dwButtonState, ebx
+
+    ; Find the index of the tile that was clicked
+    mov bx,  kBoardWidth
+    mov eax, dwPosY
+    mul bx
+    add eax, dwPosX
+
+    ; Index bounds check
+    .IF (eax > kBoardWidth * kBoardHeight)
+        mov eax, FALSE
+        ret
+    .ENDIF
+
+    ; Get pointer to tile
+    mov eax, [OFFSET stBoardTiles] + eax * SIZEOF BOARD_TILE_S
+
+    .IF (dwButtonState & FROM_LEFT_1ST_BUTTON_PRESSED)
+        ; Left-click to reveal tiles
+    .ELSEIF (dwButtonState & RIGHTMOST_BUTTON_PRESSED)
+        ; Right click to flag tiles
+    .ENDIF
+
+    ; The board state was modified, re-draw next frame
+    mov eax, TRUE
+    ret
+Board_ModifyTile endp
 
 end

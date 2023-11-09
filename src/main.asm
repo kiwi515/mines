@@ -4,7 +4,10 @@
 ; Author: Trevor Schiff (tschiff2020)
 ;         3 November 2023
 ;
-; Entry for the first CSE3120 assembly programming contest
+; Entry for the first CSE3120 assembly programming contest.
+;
+; Some Win32 API functions are used, but only those which are included
+; as part of the Irvine32 library.
 ;=============================================================================;
 
 INCLUDE Irvine32.inc

@@ -71,6 +71,9 @@ Game_Reset proc
     ; Draw new board
     mov dwDoDraw, TRUE
 
+    ; Flush old input
+    invoke Mouse_Flush
+
     ret
 Game_Reset endp
 

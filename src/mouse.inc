@@ -24,3 +24,14 @@ Mouse_Init proto
 ; Return: Mouse input event (if applicable, otherwise NULL)
 ;=============================================================================;
 Mouse_Poll proto
+
+;=============================================================================;
+; Name: Mouse_Flush
+;
+; Details: Discard all unread input events
+; 
+; Arguments: None
+;
+; Return: None
+;=============================================================================;
+Mouse_Flush proto

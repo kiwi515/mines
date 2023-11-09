@@ -118,4 +118,23 @@ _no_input:
     ret
 Mouse_Poll endp
 
+;=============================================================================;
+; Name: Mouse_Flush
+;
+; Details: Discard all unread input events
+; 
+; Arguments: None
+;
+; Return: None
+;=============================================================================;
+Mouse_Flush proc USES eax
+    invoke FlushConsoleInputBuffer,
+        dwStdIn ; hConsoleInput
+
+    ; Check for success
+    ASSERT_FALSE(eax == 0)
+
+    ret
+Mouse_Flush endp
+
 end

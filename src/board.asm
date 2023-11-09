@@ -597,8 +597,12 @@ Board_FlagTile proc,
     mov ebx, dwFlags
     mov (BOARD_TILE_S PTR [eax]).dwFlags, ebx
 
-    ; Add -1 to mine-flag diff
-    dec dwMineFlagDiff
+    ; Adjust mine-flag diff
+    .IF (dwFlags & kTileFlagFlagged)
+        dec dwMineFlagDiff ; Add flag, -1 diff
+    .ELSE
+        inc dwMineFlagDiff ; Remove flag, +1 diff
+    .ENDIF
 
     ; Board WAS modified and should be re-drawn
     mov eax, TRUE

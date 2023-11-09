@@ -59,28 +59,28 @@ endm
 ; Return: None
 ;=============================================================================;
 _mDebug_FailAssert macro file, line, exp
-    ; Variables must be local to avoid conflict
+    ;; Variables must be local to avoid conflict
     local sCaption
     local sMsg
     .data
-        ; Window caption
+        ;; Window caption
         sCaption BYTE "Assertion Failed!",0
-        ; Window message
+        ;; Window message
         sMsg BYTE "Assertion """, exp, """ failed.",0Dh,0Ah, \
             "File: &file, line &line.",0
 
-    ; Back to code
+    ;; Back to code
    .code
-        ; Show message through message box
+        ;; Show message through message box
         invoke MessageBox,
-            NULL,                 ; hWnd
-            ADDR sMsg,            ; lpText
-            ADDR sCaption,        ; lpCaption
-            MB_ICONERROR OR MB_OK ; uType
+            NULL,                 ;; hWnd
+            ADDR sMsg,            ;; lpText
+            ADDR sCaption,        ;; lpCaption
+            MB_ICONERROR OR MB_OK ;; uType
 
-        ; Exit program
+        ;; Exit program
         invoke ExitProcess,
-            0 ; uExitCode
+            0 ;; uExitCode
 endm
 
 ;=============================================================================;

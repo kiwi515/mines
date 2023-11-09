@@ -47,7 +47,7 @@ Memory_Set proto,
 ;=============================================================================;
 mMemory_Clear macro pbDst, dwSize
     invoke Memory_Set,
-        pbDst, ; pbDst
-        0,     ; bVal
-        dwSize ; dwSize
+        pbDst, ;; pbDst
+        0,     ;; bVal
+        dwSize ;; dwSize
 endm

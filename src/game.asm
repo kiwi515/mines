@@ -43,7 +43,7 @@ Game_Init proc
     invoke Mouse_Init
 
     ; Set custom font size
-    ; invoke Console_SetFontSize, kTileFontSize
+    invoke Console_SetFontSize, kTileFontSize
 
     ; Reset game state
     invoke Game_Reset
@@ -114,9 +114,6 @@ Game_Draw proc
         ret
     .ENDIF
 
-    ; Clear last frame
-    invoke Clrscr
-
     ; Draw board
     invoke Board_Draw
 
@@ -146,7 +143,7 @@ _Game_UpdatePlay proc
 
     ; Process mouse input
     .IF (eax != NULL)
-        invoke Board_ModifyTile,
+        invoke Board_MouseProc,
             eax ; pstMouseEvt
 
         ; Board tells us if it should be redrawn
@@ -183,10 +180,10 @@ _Game_UpdateWinLose proc
 
     ; Present message box
     invoke MessageBox,
-        NULL,                 ; hWnd
-        pbMsg,                ; lpText
-        ADDR sMsgTitle,       ; lpCaption
-        MB_ICONERROR OR MB_OK ; uType
+        NULL,                    ; hWnd
+        pbMsg,                   ; lpText
+        ADDR sMsgTitle,          ; lpCaption
+        MB_ICONERROR OR MB_YESNO ; uType
 
     ; Handle button choice
     .IF (eax == IDYES)

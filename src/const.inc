@@ -3,34 +3,61 @@
 ; Author: Trevor Schiff
 ;=============================================================================;
 
-; Background color table. Index using (dwFlags & kTileFlagClear).
-externdef kBgColTable: BYTE
-; Foreground color table. Index using dwNumMine.
-externdef kFgColTable: BYTE
-; Index using dwNumMine to get which character to draw.
-externdef kAdjCharTable: BYTE
+;
+; Index using tile.dwFlags.
+;
+externdef kFlagsToColorFG: BYTE
+externdef kFlagsToColorBG: BYTE
+externdef kFlagsToChar: BYTE
 
+;
+; Index using tile.dwNumMine.
+;
+externdef kAdjToColorFG: BYTE
+externdef kAdjToChar: BYTE
+
+;
 ; Tile font size
+;
 externdef kTileFontSize: COORD
 
-; Board dimensions (9x9)
-kBoardWidth  EQU 9
+;
+; Game configuration
+;
+
+; Board dimensions
+; (2:1 ratio because of the text cell width/height)
+kBoardWidth  EQU 18
 kBoardHeight EQU 9
 
 ; Number of mines in the board
-kNumMine EQU 10
+kNumMine EQU (kBoardWidth * kBoardHeight) / 8
 
-; Text background colors
-kBgColHidden EQU white ; Hidden tile
-kBgColClear  EQU lightGray      ; Cleared (revealed) tile
+;
+; Text character constants
+;
 
-; Text foreground colors
-kFgColMine  EQU black        ; Mine
-kFgColOne   EQU lightBlue    ; One adjacent mine
-kFgColTwo   EQU lightGreen   ; Two adjacent mines
-kFgColThree EQU lightRed     ; Three adjacent mines
-kFgColFour  EQU blue         ; Four adjacent mines
-kFgColFive  EQU red          ; Five adjacent mines
-kFgColSix   EQU cyan         ; Six adjacent mines
-kFgColSeven EQU lightMagenta ; Seven adjacent mines
-kFgColEight EQU magenta      ; Eight(!) adjacent mines
+kCharClear EQU ' '
+kCharFlag EQU 'F'
+kCharMine EQU 'X'
+
+;
+; Text color constants
+;
+
+; Background colors
+kBGColorHidden EQU lightGray ; Hidden tile
+kBGColorClear  EQU white     ; Cleared (revealed) tile
+kBGColorMine   EQU lightRed  ; Triggered mine
+
+; Foreground colors
+kFGColorMine  EQU black        ; Mine
+kFGColorFlag  EQU black        ; Flag
+kFGColorOne   EQU lightBlue    ; One adjacent mine
+kFGColorTwo   EQU lightGreen   ; Two adjacent mines
+kFGColorThree EQU lightRed     ; Three adjacent mines
+kFGColorFour  EQU blue         ; Four adjacent mines
+kFGColorFive  EQU red          ; Five adjacent mines
+kFGColorSix   EQU cyan         ; Six adjacent mines
+kFGColorSeven EQU lightMagenta ; Seven adjacent mines
+kFGColorEight EQU magenta      ; Eight(!) adjacent mines

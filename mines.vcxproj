@@ -89,6 +89,7 @@
       </DataExecutionPrevention>
       <SubSystem>Console</SubSystem>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <AdditionalLibraryDirectories>c:\Irvine;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <MASM>
       <TreatWarningsAsErrors>false</TreatWarningsAsErrors>

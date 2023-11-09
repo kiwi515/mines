@@ -34,7 +34,7 @@ externdef dwBoardState: DWORD
 Board_Reset proto
 
 ;=============================================================================;
-; Name: Board_Randomize
+; Name: Board_PlaceMines
 ;
 ; Details: Randomly places mines across the board. Cleared tiles are
 ;          not considered, so this can be called after the initial click. 
@@ -43,18 +43,18 @@ Board_Reset proto
 ;
 ; Return: None
 ;=============================================================================;
-Board_Randomize proto
+Board_PlaceMines proto
 
 ;=============================================================================;
-; Name: Board_Debug
+; Name: Board_ComputeAdjacency
 ;
-; Details: Truly randomizes the contents of the board, for debugging purposes.
+; Details: Computes number of adjacent mines for every tile. 
 ; 
 ; Arguments: None
 ;
 ; Return: None
 ;=============================================================================;
-Board_Debug proto
+Board_ComputeAdjacency proto
 
 ;=============================================================================;
 ; Name: Board_Draw
@@ -82,28 +82,56 @@ Board_GetTile proto,
     bPosY: BYTE
 
 ;=============================================================================;
-; Name: Board_ModifyTile
+; Name: Board_MouseProc
 ;
-; Details: Attempts to modify tile on the board
+; Details: Processes mouse input event
 ; 
-; Arguments: pstMouseEvt: Pointer to mouse input event that caused
-;                         this tile modification.
+; Arguments: pstMouseEvt: Pointer to mouse input event
 ;
 ; Return: Whether the board should be re-drawn
 ;=============================================================================;
-Board_ModifyTile proto,
+Board_MouseProc proto,
     pstMouseEvt: PTR INPUT_RECORD
 
 ;=============================================================================;
-; Name: Board_PropogateTileClear
+; Name: Board_ClearTile
 ;
-; Details: Propogates clearing of "zero" tile to all adjacent zero tiles.
+; Details: Attempts to clear tile
+; 
+; Arguments: bPosX: Tile X position.
+;            bPosY: Tile Y position.
+;
+; Return: Whether the board should be re-drawn
+;=============================================================================;
+Board_ClearTile proto,
+    bPosX: BYTE,
+    bPosY: BYTE
+
+;=============================================================================;
+; Name: Board_FlagTile
+;
+; Details: Attempts to flag tile
+; 
+; Arguments: bPosX: Tile X position.
+;            bPosY: Tile Y position.
+;
+; Return: Whether the board should be re-drawn
+;=============================================================================;
+Board_FlagTile proto,
+    bPosX: BYTE,
+    bPosY: BYTE
+
+;=============================================================================;
+; Name: Board_PropogateClearTile
+;
+; Details: Attempts to propogate clear operation to the specified neighbor
+;          tile.
 ; 
 ; Arguments: bPosX: Tile X position.
 ;            bPosY: Tile Y position.
 ;
 ; Return: None
 ;=============================================================================;
-Board_PropogateTileClear proto,
+Board_PropogateClearTile proto,
     bPosX: BYTE,
     bPosY: BYTE

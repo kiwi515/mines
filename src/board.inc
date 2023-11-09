@@ -82,7 +82,7 @@ Board_GetTile proto,
     bPosY: BYTE
 
 ;=============================================================================;
-; Name: Board_MouseProc
+; Name: Board_Update
 ;
 ; Details: Processes mouse input event
 ; 
@@ -90,7 +90,7 @@ Board_GetTile proto,
 ;
 ; Return: Whether the board should be re-drawn
 ;=============================================================================;
-Board_MouseProc proto,
+Board_Update proto,
     pstMouseEvt: PTR INPUT_RECORD
 
 ;=============================================================================;

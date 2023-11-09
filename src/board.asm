@@ -236,9 +236,7 @@ Board_Draw proc USES eax ebx ecx edx
     mov i, 0
     .WHILE (i < kBoardHeight)
         ; Jump cursor to new row
-        invoke Console_SetPos,
-            0,            ; bPosX
-            BYTE PTR [i]  ; bPosY
+        invoke Console_SetPos, 0, BYTE PTR [i]
 
         mov j, 0
         .WHILE (j < kBoardWidth)
@@ -253,13 +251,9 @@ Board_Draw proc USES eax ebx ecx edx
             .IF ((ecx & kTileFlagMine) \
                 && (dwBoardState == kBoardStateLose))
                 ; Set tile attributes
-                invoke Console_SetAttr,
-                    kFGColorMine, ; bColorFG
-                    kBGColorMine  ; bColorBG
-
+                invoke Console_SetAttr, kFGColorMine, kBGColorMine
                 ; Draw tile
-                invoke Console_PrintChar,
-                    kCharMine ; bChar
+                invoke Console_PrintChar, kCharMine
             ;
             ; Check whether we need to draw the adjacency number, or a symbol.
             ; If the tile is cleared AND is not a mine, then we draw the number.
@@ -267,25 +261,17 @@ Board_Draw proc USES eax ebx ecx edx
             .ELSEIF ((ecx & kTileFlagClear) \
                 && !(ecx & kTileFlagMine))
                 ; Set tile attributes
-                invoke Console_SetAttr,
-                    kAdjToColorFG[edx],   ; bColorFG
-                    kFlagsToColorBG[ecx]  ; bColorBG
-
+                invoke Console_SetAttr, kAdjToColorFG[edx], kFlagsToColorBG[ecx]
                 ; Draw tile
-                invoke Console_PrintChar,
-                    kAdjToChar[edx] ; bChar
+                invoke Console_PrintChar, kAdjToChar[edx]
             ;
             ; Draw whatever symbol corresponds to this tile.
             ;
             .ELSE
                 ; Set tile attributes
-                invoke Console_SetAttr,
-                    kFlagsToColorFG[ecx], ; bColorFG
-                    kFlagsToColorBG[ecx]  ; bColorBG
-
+                invoke Console_SetAttr, kFlagsToColorFG[ecx], kFlagsToColorBG[ecx]
                 ; Draw tile
-                invoke Console_PrintChar,
-                    kFlagsToChar[ecx] ; bChar
+                invoke Console_PrintChar, kFlagsToChar[ecx]
             .ENDIF
 
             ; Increment tile pointer
@@ -300,10 +286,7 @@ Board_Draw proc USES eax ebx ecx edx
     .ENDW
 
     ; Reset attributes
-    invoke Console_SetAttr,
-        white, ; bColorFG
-        black  ; bColorBG
-
+    invoke Console_SetAttr, white, black
     ret
 Board_Draw endp
 
@@ -344,7 +327,7 @@ Board_GetTile proc USES ebx ecx,
 Board_GetTile endp
 
 ;=============================================================================;
-; Name: Board_MouseProc
+; Name: Board_Update
 ;
 ; Details: Processes mouse input event
 ; 
@@ -352,7 +335,7 @@ Board_GetTile endp
 ;
 ; Return: Whether the board should be re-drawn
 ;=============================================================================;
-Board_MouseProc proc USES ebx ecx edx,
+Board_Update proc USES ebx ecx edx,
     pstMouseEvt: PTR INPUT_RECORD
 
     local dwButtonState: DWORD ; Mouse click flags
@@ -387,10 +370,15 @@ Board_MouseProc proc USES ebx ecx edx,
         invoke Board_FlagTile,
             bPosX, ; bPosX
             bPosY  ; bPosY
+
+        ; That flag may have just ended the game.
+        .IF (eax)
+            invoke Board_CheckWin
+        .ENDIF
     .ENDIF
 
     ret
-Board_MouseProc endp
+Board_Update endp
 
 ;=============================================================================;
 ; Name: Board_CheckWin

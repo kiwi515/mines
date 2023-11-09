@@ -146,15 +146,12 @@ _Game_UpdatePlay proc
 
     ; Process mouse input
     .IF (eax != NULL)
-        invoke Board_MouseProc,
+        invoke Board_Update,
             eax ; pstMouseEvt
 
         ; Board tells us if it should be redrawn
         mov dwDoDraw, eax
     .ENDIF
-
-    ; Check for player victory
-    invoke Board_CheckWin
 
     mov eax, dwExitGame
     ret

@@ -46,9 +46,10 @@ kCharMine EQU 'X'
 ;
 
 ; Background colors
-kBGColorHidden EQU lightGray ; Hidden tile
-kBGColorClear  EQU white     ; Cleared (revealed) tile
-kBGColorMine   EQU lightRed  ; Triggered mine
+kBGColorHidden EQU lightGray  ; Hidden tile
+kBGColorClear  EQU white      ; Cleared (revealed) tile
+kBGColorMine   EQU lightRed   ; Triggered mine
+kBGColorFlag   EQU lightGreen ; Flag
 
 ; Foreground colors
 kFGColorMine  EQU black        ; Mine

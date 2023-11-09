@@ -94,6 +94,17 @@ Board_MouseProc proto,
     pstMouseEvt: PTR INPUT_RECORD
 
 ;=============================================================================;
+; Name: Board_CheckWin
+;
+; Details: Checks whether the player has won (exactly all mines are flagged).
+; 
+; Arguments: None
+;
+; Return: None
+;=============================================================================;
+Board_CheckWin proto
+
+;=============================================================================;
 ; Name: Board_ClearTile
 ;
 ; Details: Attempts to clear tile

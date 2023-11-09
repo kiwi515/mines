@@ -52,7 +52,7 @@ Board_Reset proc
 
     ; Reset board state
     mov dwBoardState, kBoardStatePlay
-    mov dwMineFlagDiff, 0
+    mov dwMineFlagDiff, kNumMine
     mov bFirstClick, FALSE
 
     ret
@@ -119,9 +119,6 @@ Board_PlaceMines proc USES eax
         ; Mine placed!
         inc i
     .ENDW
-
-    ; Set difference for later
-    mov dwMineFlagDiff, kNumMine
 
     ret
 Board_PlaceMines endp
@@ -400,6 +397,65 @@ Board_MouseProc proc USES ebx ecx edx,
 Board_MouseProc endp
 
 ;=============================================================================;
+; Name: Board_CheckWin
+;
+; Details: Checks whether the player has won (exactly all mines are flagged).
+; 
+; Arguments: None
+;
+; Return: None
+;=============================================================================;
+Board_CheckWin proc USES eax ebx
+
+    local bPosX: BYTE
+    local bPosY: BYTE
+
+    ; Mine count must equal flag count for win state to even be possible.
+    .IF (dwMineFlagDiff != 0)
+        ret
+    .ENDIF
+
+    ;
+    ; Verify that all mines have been flagged.
+    ;
+
+    ; Iterate over rows
+    mov bPosY, 0
+    .WHILE (bPosY < kBoardHeight)
+        ; Iterate over columns
+        mov bPosX, 0
+        .WHILE (bPosX < kBoardWidth)
+            ; Get pointer to this tile
+            invoke Board_GetTile,
+                bPosX, ; bPosX
+                bPosY  ; bPosY
+
+            ; This tile should always exist
+            ASSERT_FALSE(eax == NULL)
+
+            ; Check flags of this tile
+            mov ebx, (BOARD_TILE_S PTR [eax]).dwFlags
+
+            .IF ((ebx & kTileFlagMine) \      ; Does this tile contain a mine?
+                && !(ebx & kTileFlagFlagged)) ; Is the mine NOT flagged?
+                ; You missed one!
+                ret
+            .ENDIF
+            
+            ; Increment counter
+            inc bPosX
+        .ENDW
+
+        ; Increment counter
+        inc bPosY
+    .ENDW
+
+    ; Congrats! You won!
+    mov dwBoardState, kBoardStateWin
+    ret
+Board_CheckWin endp
+
+;=============================================================================;
 ; Name: Board_ClearTile
 ;
 ; Details: Attempts to clear tile
@@ -460,8 +516,15 @@ Board_ClearTile proc USES ebx ecx,
     mov ebx, dwFlags
     mov (BOARD_TILE_S PTR [eax]).dwFlags, ebx
 
+    ; First clear operation has happened, we can place mines now.
+    .IF (!bFirstClick)
+        mov bFirstClick, TRUE
+        invoke Board_PlaceMines
+        invoke Board_ComputeAdjacency
+    .ENDIF
+
     ; Did we just clear a 'empty' tile (tile with no adjacent mines)?
-    .IF ((dwNumMine == 0) && (bFirstClick))
+    .IF (dwNumMine == 0)
         ;
         ; We must propogate the clear operation to all adjacent empty tiles.
         ; Check all adjacent tiles, and clear ones that are surrounded by NO mines.
@@ -497,13 +560,6 @@ Board_ClearTile proc USES ebx ecx,
             ; Increment counter
             inc i
         .ENDW
-    .ENDIF
-
-    ; First clear operation has happened, we can place mines now.
-    .IF (!bFirstClick)
-        mov bFirstClick, TRUE
-        invoke Board_PlaceMines
-        invoke Board_ComputeAdjacency
     .ENDIF
 
     ; Board WAS modified and should be re-drawn
@@ -556,6 +612,9 @@ Board_FlagTile proc,
     ; Save new tile flags
     mov ebx, dwFlags
     mov (BOARD_TILE_S PTR [eax]).dwFlags, ebx
+
+    ; Add -1 to mine-flag diff
+    dec dwMineFlagDiff
 
     ; Board WAS modified and should be re-drawn
     mov eax, TRUE

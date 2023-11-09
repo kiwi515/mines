@@ -24,16 +24,18 @@ kFlagsToColorFG BYTE \
     0,              \ ; flag & clear (INVALID)
     kBGColorHidden, \ ; mine
     kFGColorMine,   \ ; mine & clear
+    kFGColorFlag,   \ ; mine & flag
     0                 ; mine & flag & clear (INVALID)
 
 ; Background color table
 kFlagsToColorBG BYTE \
     kBGColorHidden, \ ; none
     kBGColorClear,  \ ; clear
-    kBGColorHidden, \ ; flag
+    kBGColorFlag,   \ ; flag
     0,              \ ; flag & clear (INVALID)
     kBGColorHidden, \ ; mine
     kBGColorMine,   \ ; mine & clear
+    kBGColorFlag,   \ ; mine & flag
     0                 ; mine & flag & clear (INVALID)
 
 ; Character table
@@ -44,6 +46,7 @@ kFlagsToChar BYTE \
     0,          \ ; flag & clear (INVALID)
     kCharClear, \ ; mine
     kCharMine,  \ ; mine & clear
+    kCharFlag,  \ ; mine & flag
     0             ; mine & flag & clear (INVALID)
 
 ;

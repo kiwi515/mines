@@ -150,6 +150,9 @@ _Game_UpdatePlay proc
         mov dwDoDraw, eax
     .ENDIF
 
+    ; Check for player victory
+    invoke Board_CheckWin
+
     mov eax, dwExitGame
     ret
 _Game_UpdatePlay endp

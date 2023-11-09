@@ -18,7 +18,7 @@ sTitleWin32 BYTE "Win32 Error",0
 
 .code
 ;=============================================================================;
-; Name: Debug_CheckErrorWin32
+; Name: Debug_GetLastError
 ;
 ; Details: Shows the last Win32 error using a message box.
 ;          Irvine32 already does this but prints it to the console instead.
@@ -27,7 +27,7 @@ sTitleWin32 BYTE "Win32 Error",0
 ;
 ; Return: None
 ;=============================================================================;
-Debug_CheckErrorWin32 proc USES eax
+Debug_GetLastError proc USES eax
 
     local dwFlags:     DWORD
     local dwMessageId: DWORD
@@ -64,6 +64,6 @@ Debug_CheckErrorWin32 proc USES eax
         pErrMsg ; hMem
 
     ret
-Debug_CheckErrorWin32 endp
+Debug_GetLastError endp
 
 end

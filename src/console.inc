@@ -22,7 +22,21 @@ externdef dwStdErr: DWORD
 Console_Init proto
 
 ;=============================================================================;
-; Name: Console_SetPos
+; Name: Console_ResizeWindow
+;
+; Details: Set window dimensions
+; 
+; Arguments: wWidth:  Window width
+;            wHeight: Window height
+;
+; Return: None
+;=============================================================================;
+Console_ResizeWindow proto,
+    wWidth:  WORD,
+    wHeight: WORD
+
+;=============================================================================;
+; Name: Console_MoveCursor
 ;
 ; Details: Sets cursor position
 ; 
@@ -31,12 +45,24 @@ Console_Init proto
 ;
 ; Return: None
 ;=============================================================================;
-Console_SetPos proto,
+Console_MoveCursor proto,
     bPosX: BYTE,
     bPosY: BYTE
 
 ;=============================================================================;
-; Name: Console_SetAttr
+; Name: Console_ShowCursor
+;
+; Details: Set cursor visibility
+; 
+; Arguments: bVisible: Whether the cursor should be visible
+;
+; Return: None
+;=============================================================================;
+Console_ShowCursor proto,
+    bVisible: BYTE
+
+;=============================================================================;
+; Name: Console_SetTextAttr
 ;
 ; Details: Sets text and background colors
 ; 
@@ -45,7 +71,7 @@ Console_SetPos proto,
 ;
 ; Return: None
 ;=============================================================================;
-Console_SetAttr proto,
+Console_SetTextAttr proto,
     bColorFG: BYTE,
     bColorBG: BYTE
 

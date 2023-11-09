@@ -84,7 +84,7 @@ _mDebug_FailAssert macro file, line, exp
 endm
 
 ;=============================================================================;
-; Name: Debug_CheckErrorWin32
+; Name: Debug_GetLastError
 ;
 ; Details: Shows the last Win32 error using a message box.
 ;          Irvine32 already does this but prints it to the console instead.
@@ -93,4 +93,4 @@ endm
 ;
 ; Return: None
 ;=============================================================================;
-Debug_CheckErrorWin32 proto
+Debug_GetLastError proto

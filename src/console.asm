@@ -68,7 +68,7 @@ Console_Init proc USES eax
 Console_Init endp
 
 ;=============================================================================;
-; Name: Console_SetPos
+; Name: Console_MoveCursor
 ;
 ; Details: Sets cursor position
 ; 
@@ -77,7 +77,7 @@ Console_Init endp
 ;
 ; Return: None
 ;=============================================================================;
-Console_SetPos proc USES eax edx,
+Console_MoveCursor proc USES eax edx,
     bPosX: BYTE,
     bPosY: BYTE
 
@@ -87,10 +87,85 @@ Console_SetPos proc USES eax edx,
     call Gotoxy
     
     ret
-Console_SetPos endp
+Console_MoveCursor endp
 
 ;=============================================================================;
-; Name: Console_SetAttr
+; Name: Console_ResizeWindow
+;
+; Details: Set window dimensions
+; 
+; Arguments: wWidth:  Window width
+;            wHeight: Window height
+;
+; Return: None
+;=============================================================================;
+Console_ResizeWindow proc USES eax,
+    wWidth:  WORD,
+    wHeight: WORD
+
+    ; Window dimensions
+    local stSize: SMALL_RECT
+    
+    ; Zero-initialize
+    mMemory_Clear    \
+        ADDR stSize, \ ; pbDst
+        SIZEOF stSize  ; dwSize
+
+    ; Pack dimensions into rect structure
+    mov ax, wWidth
+    mov stSize.Right, ax
+    mov ax, wHeight
+    mov stSize.Bottom, ax
+
+    invoke SetConsoleWindowInfo,
+        dwStdOut,   ; hConsoleOutput
+        TRUE,       ; bAbsolute
+        ADDR stSize ; lpConsoleWindow
+
+    ; Check for success
+    ASSERT_FALSE(eax == 0)
+
+    ret
+Console_ResizeWindow endp
+
+;=============================================================================;
+; Name: Console_ShowCursor
+;
+; Details: Set cursor visibility
+; 
+; Arguments: bVisible: Whether the cursor should be visible
+;
+; Return: None
+;=============================================================================;
+Console_ShowCursor proc USES eax,
+    bVisible: BYTE
+
+    ; Cursor info
+    local stCursor: CONSOLE_CURSOR_INFO
+
+    ; Get current info
+    invoke GetConsoleCursorInfo,
+        dwStdOut,     ; hConsoleOutput
+        ADDR stCursor ; lpConsoleCursorInfo
+    ; Check for success
+    ASSERT_FALSE(eax == 0)
+
+    ; Modify visibility
+    movzx eax, bVisible ; Need DWORD for Irvine structure
+    mov stCursor.bVisible, eax
+
+    ; Set new info
+    invoke SetConsoleCursorInfo,
+        dwStdOut,     ; hConsoleOutput
+        ADDR stCursor ; lpConsoleCursorInfo
+    ; Check for success
+    ASSERT_FALSE(eax == 0)
+
+    ret
+Console_ShowCursor endp
+
+;=============================================================================;
+; Name: Console_SetTextAttr
 ;
 ; Details: Sets text and background colors
 ; 
@@ -99,7 +174,7 @@ Console_SetPos endp
 ;
 ; Return: None
 ;=============================================================================;
-Console_SetAttr proc USES eax ebx ecx edx,
+Console_SetTextAttr proc USES eax ebx ecx edx,
     bColorFG: BYTE,
     bColorBG: BYTE
 
@@ -118,7 +193,7 @@ Console_SetAttr proc USES eax ebx ecx edx,
     ASSERT_FALSE(eax == 0)
 
     ret
-Console_SetAttr endp
+Console_SetTextAttr endp
 
 ;=============================================================================;
 ; Name: Console_Print

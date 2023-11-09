@@ -236,7 +236,7 @@ Board_Draw proc USES eax ebx ecx edx
     mov i, 0
     .WHILE (i < kBoardHeight)
         ; Jump cursor to new row
-        invoke Console_SetPos, 0, BYTE PTR [i]
+        invoke Console_MoveCursor, 0, BYTE PTR [i]
 
         mov j, 0
         .WHILE (j < kBoardWidth)
@@ -251,7 +251,7 @@ Board_Draw proc USES eax ebx ecx edx
             .IF ((ecx & kTileFlagMine) \
                 && (dwBoardState == kBoardStateLose))
                 ; Set tile attributes
-                invoke Console_SetAttr, kFGColorMine, kBGColorMine
+                invoke Console_SetTextAttr, kFGColorMine, kBGColorMine
                 ; Draw tile
                 invoke Console_PrintChar, kCharMine
             ;
@@ -261,7 +261,7 @@ Board_Draw proc USES eax ebx ecx edx
             .ELSEIF ((ecx & kTileFlagClear) \
                 && !(ecx & kTileFlagMine))
                 ; Set tile attributes
-                invoke Console_SetAttr, kAdjToColorFG[edx], kFlagsToColorBG[ecx]
+                invoke Console_SetTextAttr, kAdjToColorFG[edx], kFlagsToColorBG[ecx]
                 ; Draw tile
                 invoke Console_PrintChar, kAdjToChar[edx]
             ;
@@ -269,7 +269,7 @@ Board_Draw proc USES eax ebx ecx edx
             ;
             .ELSE
                 ; Set tile attributes
-                invoke Console_SetAttr, kFlagsToColorFG[ecx], kFlagsToColorBG[ecx]
+                invoke Console_SetTextAttr, kFlagsToColorFG[ecx], kFlagsToColorBG[ecx]
                 ; Draw tile
                 invoke Console_PrintChar, kFlagsToChar[ecx]
             .ENDIF
@@ -286,7 +286,7 @@ Board_Draw proc USES eax ebx ecx edx
     .ENDW
 
     ; Reset attributes
-    invoke Console_SetAttr, white, black
+    invoke Console_SetTextAttr, white, black
     ret
 Board_Draw endp
 

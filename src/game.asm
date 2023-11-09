@@ -42,9 +42,18 @@ Game_Init proc
     invoke Console_Init
     invoke Mouse_Init
 
+    ; Hide console cursor
+    invoke Console_ShowCursor,
+        FALSE ; bVisible
+
+    ; Resize window to fit board
+    invoke Console_ResizeWindow,
+        kBoardWidth, ; dwWidth
+        kBoardHeight ; dwHeight
+
     ; Reset game state
     invoke Game_Reset
-
+    
     ret
 Game_Init endp
 

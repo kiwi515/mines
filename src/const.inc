@@ -26,6 +26,7 @@ kBoardWidth  EQU 18
 kBoardHeight EQU 9
 
 ; Number of mines in the board
+; (Approx. one mine every eight tiles)
 kNumMine EQU (kBoardWidth * kBoardHeight) / 8
 
 ;
@@ -33,8 +34,8 @@ kNumMine EQU (kBoardWidth * kBoardHeight) / 8
 ;
 
 kCharClear EQU ' '
-kCharFlag EQU 'F'
-kCharMine EQU 'X'
+kCharFlag  EQU '!'
+kCharMine  EQU 'X'
 
 ;
 ; Text color constants
@@ -44,11 +45,11 @@ kCharMine EQU 'X'
 kBGColorHidden EQU lightGray  ; Hidden tile
 kBGColorClear  EQU white      ; Cleared (revealed) tile
 kBGColorMine   EQU lightRed   ; Triggered mine
-kBGColorFlag   EQU lightGreen ; Flag
+kBGColorFlag   EQU lightGray  ; Flag
 
 ; Foreground colors
 kFGColorMine  EQU black        ; Mine
-kFGColorFlag  EQU black        ; Flag
+kFGColorFlag  EQU red          ; Flag
 kFGColorOne   EQU lightBlue    ; One adjacent mine
 kFGColorTwo   EQU lightGreen   ; Two adjacent mines
 kFGColorThree EQU lightRed     ; Three adjacent mines

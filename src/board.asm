@@ -255,8 +255,7 @@ Board_Draw proc USES eax ebx ecx edx
                 ; Set tile attributes
                 invoke Console_SetAttr,
                     kFGColorMine, ; bColorFG
-                    kBGColorMine, ; bColorBG
-                    TRUE          ; bGrid
+                    kBGColorMine  ; bColorBG
 
                 ; Draw tile
                 invoke Console_PrintChar,
@@ -270,8 +269,7 @@ Board_Draw proc USES eax ebx ecx edx
                 ; Set tile attributes
                 invoke Console_SetAttr,
                     kAdjToColorFG[edx],   ; bColorFG
-                    kFlagsToColorBG[ecx], ; bColorBG
-                    TRUE                  ; bGrid
+                    kFlagsToColorBG[ecx]  ; bColorBG
 
                 ; Draw tile
                 invoke Console_PrintChar,
@@ -283,8 +281,7 @@ Board_Draw proc USES eax ebx ecx edx
                 ; Set tile attributes
                 invoke Console_SetAttr,
                     kFlagsToColorFG[ecx], ; bColorFG
-                    kFlagsToColorBG[ecx], ; bColorBG
-                    TRUE                  ; bGrid
+                    kFlagsToColorBG[ecx]  ; bColorBG
 
                 ; Draw tile
                 invoke Console_PrintChar,
@@ -305,8 +302,7 @@ Board_Draw proc USES eax ebx ecx edx
     ; Reset attributes
     invoke Console_SetAttr,
         white, ; bColorFG
-        black, ; bColorBG
-        FALSE  ; bGrid
+        black  ; bColorBG
 
     ret
 Board_Draw endp

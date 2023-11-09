@@ -141,27 +141,18 @@ Console_SetFontSize endp
 ; 
 ; Arguments: bColorFG: Foreground color
 ;            bColorBG: Background color
-;            bGrid:    Enable grid
 ;
 ; Return: None
 ;=============================================================================;
 Console_SetAttr proc USES eax ebx ecx edx,
     bColorFG: BYTE,
-    bColorBG: BYTE,
-    bGrid:    BYTE
+    bColorBG: BYTE
 
     ; Construct text attribute
     mov ax, 0
     or al, bColorBG
     shl al, 4
     or al, bColorFG
-
-    ; Optional grid
-    .IF (bGrid)
-        or ax, COMMON_LVB_GRID_HORIZONTAL \
-            OR COMMON_LVB_GRID_LVERTICAL \
-            OR COMMON_LVB_GRID_RVERTICAL
-    .ENDIF
 
     ; Apply attributes to all future text
     invoke SetConsoleTextAttribute,

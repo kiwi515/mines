@@ -42,9 +42,6 @@ Game_Init proc
     invoke Console_Init
     invoke Mouse_Init
 
-    ; Set custom font size
-    invoke Console_SetFontSize, kTileFontSize
-
     ; Reset game state
     invoke Game_Reset
 

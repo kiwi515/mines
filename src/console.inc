@@ -36,18 +36,6 @@ Console_SetPos proto,
     bPosY: BYTE
 
 ;=============================================================================;
-; Name: Console_SetFontSize
-;
-; Details: Sets size of the current font
-; 
-; Arguments: stSize: Font size (width, height)
-;
-; Return: None
-;=============================================================================;
-Console_SetFontSize proto,
-    stSize: COORD
-
-;=============================================================================;
 ; Name: Console_SetAttr
 ;
 ; Details: Sets text and background colors

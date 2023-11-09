@@ -77,7 +77,4 @@ kAdjToChar BYTE  \
     '7',        \ ; Seven adjacent mines
     '8'           ; Eight(!) adjacent mines 
 
-; Tile font size
-kTileFontSize COORD <76, 76>
-
 end

@@ -17,11 +17,6 @@ externdef kAdjToColorFG: BYTE
 externdef kAdjToChar: BYTE
 
 ;
-; Tile font size
-;
-externdef kTileFontSize: COORD
-
-;
 ; Game configuration
 ;
 

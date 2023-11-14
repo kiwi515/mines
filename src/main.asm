@@ -12,6 +12,9 @@
 ; Help: Left-click to clear tiles, right-click to flag them (toggle).
 ;       The very first "clear" (left-click) will always be safe.
 ;       You win the game when all mines (and nothing else) are flagged.
+;
+;       To change the board size, zoom in/out in the Command Prompt window,
+;       using CTRL+ScrollUp or CTRL+ScrollDown.
 ;=============================================================================;
 
 INCLUDE Irvine32.inc

@@ -8,6 +8,10 @@
 ;
 ; Some Win32 API functions are used, but only those which are included
 ; as part of the Irvine32 library.
+;
+; Help: Left-click to clear tiles, right-click to flag them (toggle).
+;       The very first "clear" (left-click) will always be safe.
+;       You win the game when all mines (and nothing else) are flagged.
 ;=============================================================================;
 
 INCLUDE Irvine32.inc

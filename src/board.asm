@@ -106,6 +106,11 @@ Board_PlaceMines proc USES eax
         ; Load tile flags
         mov ebx, (BOARD_TILE_S PTR [eax]).dwFlags
 
+        ; Don't place mine twice
+        .IF (ebx & kTileFlagMine)
+            .CONTINUE
+        .ENDIF
+
         ; First click is *ALWAYS* safe!!!
         ; To implement this, we generate mines after the first click.
         ; This means we must not place mines on cleared tiles.

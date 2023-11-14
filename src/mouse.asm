@@ -128,6 +128,7 @@ Mouse_Poll endp
 ; Return: None
 ;=============================================================================;
 Mouse_Flush proc USES eax
+
     invoke FlushConsoleInputBuffer,
         dwStdIn ; hConsoleInput
 

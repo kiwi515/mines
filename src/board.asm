@@ -29,7 +29,7 @@ bFirstClick BYTE ?
 ; +1 for each mine, -1 for each flag.
 ;
 ; A: If non-zero, the game cannot possibly be over.
-; B: If zero, the game is over if every mine is flagged.
+; B: If zero, the game is over *IF* every mine is flagged.
 ;
 dwMineFlagDiff DWORD ?
 

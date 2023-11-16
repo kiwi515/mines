@@ -26,6 +26,10 @@ INCLUDE windows.inc
 .model flat,stdcall
 .stack 4096
 
+.data
+; Whether to exit the game
+dwDoExit DWORD FALSE
+
 .code
 ;=============================================================================;
 ; Name: main
@@ -42,15 +46,16 @@ main proc
     invoke Game_Init
 
 _loop:
-    ; Game step
+    ; Update game state
     invoke Game_Update
+    mov dwDoExit, eax
+
+    ; Draw game state
     invoke Game_Draw
 
-    ; Should we exit?
-    cmp eax, TRUE
+    ; Exit program if necessary
+    cmp dwDoExit, TRUE
     jne _loop
-
-    ; Exit program
     invoke ExitProcess, 0
 main endp
 

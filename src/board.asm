@@ -24,6 +24,11 @@ dwBoardState DWORD ?
 ; Whether the first click has happened
 bFirstClick BYTE ?
 
+; Score text
+sScore BYTE "Score: ",0
+; Board score
+dwBoardScore DWORD ?
+
 ;
 ; Mine-flag "difference".
 ; +1 for each mine, -1 for each flag.
@@ -52,6 +57,7 @@ Board_Reset proc
 
     ; Reset board state
     mov dwBoardState, kBoardStatePlay
+    mov dwBoardScore, 0
     mov dwMineFlagDiff, kNumMine
     mov bFirstClick, FALSE
 
@@ -231,7 +237,6 @@ Board_ComputeAdjacency endp
 ; Return: None
 ;=============================================================================;
 Board_Draw proc USES eax ebx ecx edx
-
     local i: DWORD ; Board row
     local j: DWORD ; Board column
 
@@ -292,6 +297,15 @@ Board_Draw proc USES eax ebx ecx edx
 
     ; Reset attributes
     invoke Console_SetTextAttr, white, black
+
+    ; Draw score text
+    invoke Console_MoveCursor, 0, kBoardHeight
+    invoke Console_Print, ADDR sScore
+
+    ; Draw score decimal
+    mov eax, dwBoardScore
+    call WriteDec
+
     ret
 Board_Draw endp
 
@@ -550,6 +564,9 @@ Board_ClearTile proc USES ebx ecx,
             inc i
         .ENDW
     .ENDIF
+
+    ; Award points for clearing the tile
+    add dwBoardScore, kRewardClear
 
     ; Board WAS modified and should be re-drawn
     mov eax, TRUE

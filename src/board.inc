@@ -4,9 +4,10 @@
 ;=============================================================================;
 
 ; Possible tile flags
-kTileFlagClear   EQU   1b ; Tile has been cleared
-kTileFlagFlagged EQU  10b ; Tile has been flagged
-kTileFlagMine    EQU 100b ; Tile contains a mine
+kTileFlagClear   EQU    1b ; Tile has been cleared
+kTileFlagFlagged EQU   10b ; Tile has been flagged
+kTileFlagMine    EQU  100b ; Tile contains a mine
+kTileFlagScanned EQU 1000b ; Tile has been scanned
 
 ; Possible board states
 kBoardStatePlay EQU 0 ; Ongoing

@@ -26,6 +26,8 @@ bFirstClick BYTE ?
 
 ; Score text
 sScore BYTE "Score: ",0
+; To clear old score without slow Clrscr routine
+sScoreClear BYTE "Score:       ",0
 ; Board score
 dwBoardScore DWORD ?
 
@@ -256,9 +258,24 @@ Board_Draw proc USES eax ebx ecx edx
             mov edx, (BOARD_TILE_S PTR [ebx]).dwNumMine
             
             ;
+            ; Was the tile revealed using the scanner powerup?
+            ;
+            mov eax, (BOARD_TILE_S PTR [ebx]).dwScanned
+            .IF (eax)
+                ; Mark tiles red if they have mines, otherwise green.
+                .IF (ecx & kTileFlagMine)
+                    invoke Console_SetTextAttr, kBGColorScanMine, kBGColorScanMine
+                .ELSE
+                    invoke Console_SetTextAttr, kBGColorScanOk, kBGColorScanOk
+                .ENDIF
+
+                ; No matter what, scanned tiles appear blank
+                ; (Information is given to the player via the color)
+                invoke Console_PrintChar, kCharClear
+            ;
             ; When the player loses, we show all mines.
             ;
-            .IF ((ecx & kTileFlagMine) \
+            .ELSEIF ((ecx & kTileFlagMine) \
                 && (dwBoardState == kBoardStateLose))
                 ; Set tile attributes
                 invoke Console_SetTextAttr, kFGColorMine, kBGColorMine
@@ -297,6 +314,10 @@ Board_Draw proc USES eax ebx ecx edx
 
     ; Reset attributes
     invoke Console_SetTextAttr, white, black
+
+    ; Clear old score text
+    invoke Console_MoveCursor, 0, kBoardHeight
+    invoke Console_Print, ADDR sScoreClear
 
     ; Draw score text
     invoke Console_MoveCursor, 0, kBoardHeight
@@ -378,14 +399,16 @@ Board_Update proc USES ebx ecx edx,
     ; Need to make sure though, because if they were, that would break this
     ASSERT_TRUE(ch == 0 && dh == 0)
 
-    ; Handle click
+    ;
+    ; Dispatch game behavior based on which mouse button was pressed
+    ;
     .IF (dwButtonState & FROM_LEFT_1ST_BUTTON_PRESSED)
         ; Left-click to reveal tiles
         invoke Board_ClearTile,
             bPosX, ; bPosX
             bPosY  ; bPosY
     .ELSEIF (dwButtonState & RIGHTMOST_BUTTON_PRESSED)
-        ; Right click to flag tiles (toggle)
+        ; Right-click to flag tiles (toggle)
         invoke Board_FlagTile,
             bPosX, ; bPosX
             bPosY  ; bPosY
@@ -394,6 +417,11 @@ Board_Update proc USES ebx ecx edx,
         .IF (eax)
             invoke Board_CheckWin
         .ENDIF
+    .ELSEIF (dwButtonState & FROM_LEFT_2ND_BUTTON_PRESSED)
+        ; Middle-click to purchase scanner powerup
+        invoke Board_ScanTile,
+            bPosX, ; bPosX
+            bPosY  ; bPosY
     .ENDIF
 
     ret
@@ -519,6 +547,12 @@ Board_ClearTile proc USES ebx ecx,
     mov ebx, dwFlags
     mov (BOARD_TILE_S PTR [eax]).dwFlags, ebx
 
+    ; Remove "scanned" attribute from tile
+    mov (BOARD_TILE_S PTR [eax]).dwScanned, FALSE
+
+    ; Award points for clearing the tile
+    add dwBoardScore, kRewardClear
+
     ; First clear operation has happened, we can place mines now.
     .IF (!bFirstClick)
         mov bFirstClick, TRUE
@@ -564,9 +598,6 @@ Board_ClearTile proc USES ebx ecx,
             inc i
         .ENDW
     .ENDIF
-
-    ; Award points for clearing the tile
-    add dwBoardScore, kRewardClear
 
     ; Board WAS modified and should be re-drawn
     mov eax, TRUE
@@ -619,6 +650,9 @@ Board_FlagTile proc,
     mov ebx, dwFlags
     mov (BOARD_TILE_S PTR [eax]).dwFlags, ebx
 
+    ; Remove "scanned" attribute from tile
+    mov (BOARD_TILE_S PTR [eax]).dwScanned, FALSE
+
     ; Adjust mine-flag diff
     .IF (dwFlags & kTileFlagFlagged)
         dec dwMineFlagDiff ; Add flag, -1 diff
@@ -630,6 +664,117 @@ Board_FlagTile proc,
     mov eax, TRUE
     ret
 Board_FlagTile endp
+
+;=============================================================================;
+; Name: Board_ScanTile
+;
+; Details: Attempts to scan tile (after purchasing the powerup)
+; 
+; Arguments: bPosX: Tile X position.
+;            bPosY: Tile Y position.
+;
+; Return: Whether the board should be re-drawn
+;=============================================================================;
+Board_ScanTile proc USES ebx,
+    bPosX: BYTE,
+    bPosY: BYTE
+
+    local i: BYTE
+    local j: BYTE
+
+    ; Can the player afford the scanner powerup?
+    .IF (dwBoardScore < kCostScanner)
+        ; Board was not modified and does not need to be re-drawn
+        mov eax, FALSE
+        ret
+    .ENDIF
+
+    ; Get pointer to tile
+    invoke Board_GetTile,
+        bPosX, ; bPosX
+        bPosY  ; bPosY
+
+    ; Does the tile exist?
+    .IF (eax == NULL)
+        ; Board was not modified and does not need to be re-drawn
+        mov eax, FALSE
+        ret
+    .ENDIF
+
+    ; Cannot scan tiles that already have been scanned
+    mov ebx, (BOARD_TILE_S PTR [eax]).dwScanned
+    .IF (ebx)
+        ; Board was not modified and does not need to be re-drawn
+        mov eax, FALSE
+        ret
+    .ENDIF
+
+    ; Load tile flags
+    mov ebx, (BOARD_TILE_S PTR [eax]).dwFlags
+    ; Cannot scan tiles that already have been cleared
+    .IF (ebx & kTileFlagClear)
+        ; Board was not modified and does not need to be re-drawn
+        mov eax, FALSE
+        ret
+    .ENDIF
+
+    ; Mark tile as scanned
+    mov (BOARD_TILE_S PTR [eax]).dwScanned, TRUE
+    ; Charge player for the powerup
+    sub dwBoardScore, kCostScanner
+
+    ;
+    ; Scan operation also affects neighboring tiles
+    ;    
+    
+    ; Iterate over rows
+    mov i, 0
+    .WHILE (i < 3)
+        ; Iterate over columns
+        mov j, 0
+        .WHILE (j < 3)
+
+            ; Subtract 1 from i/j to change range from
+            ; [0, 2] (iteration) to [-1, 1] (offset!!!)
+            mov ch, i
+            mov cl, j
+            sub ch, 1
+            sub cl, 1
+
+            ; Derive coordinates of adjacent tile
+            add cl, bPosX
+            add ch, bPosY
+
+            ; Get handle to adjacent tile
+            invoke Board_GetTile,
+                cl, ; bPosX
+                ch  ; bPosY
+
+            ; Tile may not exist if scan happens near board edge
+            .IF (eax != NULL)
+
+                ; Cannot scan tiles that already have been cleared
+                mov ebx, (BOARD_TILE_S PTR [eax]).dwFlags
+
+                .IF (!(ebx & kTileFlagClear))
+                    ; Mark neighbor as scanned
+                    mov (BOARD_TILE_S PTR [eax]).dwScanned, TRUE
+                .ENDIF
+
+            .ENDIF
+
+            ; Increment counter
+            inc j
+        .ENDW
+
+        ; Increment counter
+        inc i
+    .ENDW
+
+    ; Board WAS modified and should be re-drawn
+    mov eax, TRUE
+    ret
+Board_ScanTile endp
 
 ;=============================================================================;
 ; Name: Board_PropogateClearTile

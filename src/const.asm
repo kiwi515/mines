@@ -25,15 +25,7 @@ kFlagsToColorFG BYTE \
     kBGColorHidden, \ ; mine
     kFGColorMine,   \ ; mine & clear
     kFGColorFlag,   \ ; mine & flag
-    0,              \ ; mine & flag & clear (INVALID)
-    0,              \ ; scanned
-    kBGColorClear,  \ ; scanned & clear
-    kFGColorFlag,   \ ; scanned & flag
-    0,              \ ; scanned & flag & clear (INVALID)
-    kBGColorHidden, \ ; scanned & mine
-    0,              \ ; scanned & mine & clear (INVALID)
-    kFGColorFlag,   \ ; scanned & mine & flag
-    0,              \ ; scanned & mine & flag & clear (INVALID)
+    0                 ; mine & flag & clear (INVALID)
 
 ; Background color table
 kFlagsToColorBG BYTE \

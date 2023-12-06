@@ -34,10 +34,9 @@ kBoardHeight EQU 9
 kNumMine EQU (kBoardWidth * kBoardHeight) / 8
 
 ; Score reward for clearing a tile
-kRewardClear EQU 200
-
+kRewardClear EQU 100
 ; Cost of scanner power-up
-kCostScanner EQU 4000
+kCostScanner EQU 5000
 
 ;
 ; Text character constants

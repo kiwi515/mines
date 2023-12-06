@@ -20,6 +20,10 @@ externdef kAdjToChar: BYTE
 ; Game configuration
 ;
 
+; Board position
+kBoardPosX EQU 0
+kBoardPosY EQU 1
+
 ; Board dimensions
 ; (2:1 ratio because of the text cell width/height)
 kBoardWidth  EQU 18
@@ -28,6 +32,11 @@ kBoardHeight EQU 9
 ; Number of mines in the board
 ; (Approx. one mine every eight tiles)
 kNumMine EQU (kBoardWidth * kBoardHeight) / 8
+
+; Score reward for clearing a tile
+kRewardClear EQU 100
+; Cost of scanner power-up
+kCostScanner EQU 5000
 
 ;
 ; Text character constants
@@ -42,10 +51,12 @@ kCharMine  EQU 'X'
 ;
 
 ; Background colors
-kBGColorHidden EQU lightGray  ; Hidden tile
-kBGColorClear  EQU white      ; Cleared (revealed) tile
-kBGColorMine   EQU lightRed   ; Triggered mine
-kBGColorFlag   EQU lightGray  ; Flag
+kBGColorHidden   EQU lightGray  ; Hidden tile
+kBGColorClear    EQU white      ; Cleared (revealed) tile
+kBGColorMine     EQU lightRed   ; Triggered mine
+kBGColorFlag     EQU lightGray  ; Flag
+kBGColorScanOk   EQU green      ; Scanned -> Safe
+kBGColorScanMine EQU red        ; Scanned -> Mine!
 
 ; Foreground colors
 kFGColorMine  EQU black        ; Mine

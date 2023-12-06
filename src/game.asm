@@ -80,6 +80,9 @@ Game_Reset proc
     ; Flush old input
     invoke Mouse_Flush
 
+    ; Clear graphics
+    call Clrscr
+
     ret
 Game_Reset endp
 

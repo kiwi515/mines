@@ -4,9 +4,9 @@
 ;=============================================================================;
 
 ; Possible tile flags
-kTileFlagClear   EQU   1b ; Tile has been cleared
-kTileFlagFlagged EQU  10b ; Tile has been flagged
-kTileFlagMine    EQU 100b ; Tile contains a mine
+kTileFlagClear   EQU    1b ; Tile has been cleared
+kTileFlagFlagged EQU   10b ; Tile has been flagged
+kTileFlagMine    EQU  100b ; Tile contains a mine
 
 ; Possible board states
 kBoardStatePlay EQU 0 ; Ongoing
@@ -16,6 +16,7 @@ kBoardStateLose EQU 2 ; Mine was triggered
 ; Board tile structure
 BOARD_TILE_S STRUCT
     dwFlags   DWORD ? ; Tile flags
+    dwScanned DWORD ? ; Whether the tile has been scanned
     dwNumMine DWORD ? ; Number of adjacent mines
 BOARD_TILE_S ENDS
 
@@ -129,6 +130,20 @@ Board_ClearTile proto,
 ; Return: Whether the board should be re-drawn
 ;=============================================================================;
 Board_FlagTile proto,
+    bPosX: BYTE,
+    bPosY: BYTE
+
+;=============================================================================;
+; Name: Board_ScanTile
+;
+; Details: Attempts to scan tile (after purchasing the powerup)
+; 
+; Arguments: bPosX: Tile X position.
+;            bPosY: Tile Y position.
+;
+; Return: Whether the board should be re-drawn
+;=============================================================================;
+Board_ScanTile proto,
     bPosX: BYTE,
     bPosY: BYTE
 

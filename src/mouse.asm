@@ -98,10 +98,11 @@ Mouse_Poll proc
     cmp stMouseEvt.EventType, MOUSE_EVENT
     jne _no_input
 
-    ; Is left/right pressed?
+    ; Is one of the mouse buttons pressed?
     test stMouseEvt.Event.dwButtonState, \
            FROM_LEFT_1ST_BUTTON_PRESSED  \ ; Left-click
-        OR RIGHTMOST_BUTTON_PRESSED        ; Right-click
+        OR RIGHTMOST_BUTTON_PRESSED      \ ; Right-click
+        OR FROM_LEFT_2ND_BUTTON_PRESSED    ; Middle-click
     jz _no_input
 
     ; Was it *specifically* a click/release?
